@@ -1,0 +1,20 @@
+{
+  "Version": 1,
+  "Hash": "4b6ua9gh4wYg4PaGQpiWAJHLaol6T0Ota+fM4BZKBqk=",
+  "Source": "NAPAProject",
+  "BasePath": "_content/NAPAProject",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "NAPAProject/wwwroot",
+      "Source": "NAPAProject",
+      "ContentRoot": "/home/david/Code/NAPA/NAPAProjectBackend/src/NAPAProject/wwwroot/",
+      "BasePath": "_content/NAPAProject",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [],
+  "Endpoints": []
+}

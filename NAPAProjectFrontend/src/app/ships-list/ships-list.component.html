@@ -1,0 +1,27 @@
+<div class="ships-container">
+    <h2>Ships</h2>
+  
+    <form [formGroup]="form" (ngSubmit)="add()">
+      <input formControlName="name" placeholder="Name" required>
+      <input type="number" formControlName="speed" placeholder="Speed" required>
+      <button type="submit" [disabled]="form.invalid">Add Ship</button>
+    </form>
+  
+    <div *ngIf="loading$ | async">Loading…</div>
+    <div class="error" *ngIf="(error$ | async) as err">{{ err }}</div>
+  
+    <table *ngIf="(ships$ | async)?.length">
+      <thead>
+        <tr><th>Name</th><th>Speed</th><th>Actions</th></tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let ship of ships$ | async">
+          <td>{{ ship.name }}</td>
+          <td>{{ ship.speed }}</td>
+          <td><button (click)="delete(ship.name)">Delete</button></td>
+          <td><button (click)="delete(ship.name)">Rename</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  

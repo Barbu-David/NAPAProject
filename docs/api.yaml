@@ -1,0 +1,1006 @@
+
+openapi: 3.0.1
+info:
+  title: NAPA project
+  description: NAPA trainee assignment
+  version: "1"
+tags:
+- name: ships
+  description: Ships related operations
+- name: countries
+  description: Country related operations
+- name: ports
+  description: Port related operations
+- name: voyages
+  description: Voyages related operations
+  
+paths:
+  /ships:
+    put:
+      tags: ["ships"]
+      description: Adds a new ship to the data base
+      operationId: addShip
+      requestBody:
+       description: Ship details
+       required: true
+       content:
+        application/json:
+          schema:
+            type: object
+            description: The name and speed of the new ship
+            properties:
+              name:
+                $ref: '#/components/schemas/ShipName'
+              speed:
+                $ref: '#/components/schemas/ShipSpeed'
+      responses:
+        '201':
+          description: Ship created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShipName'
+        '400':
+          description: Invalid input or parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+    get:
+      tags: ["ships"]
+      description: Retrieves the names of all the ships
+      operationId: getShips
+      responses:
+        '200':
+          description: The list of all ship names.
+          content:
+            application/json:
+              schema:
+                description: ship names array
+                type: array
+                items:
+                  $ref: '#/components/schemas/ShipName'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+  /ships/{name}:
+    parameters:
+     - name: name
+       in: path
+       required: true  
+       description: The name for a ship.
+       schema:
+        $ref: '#/components/schemas/ShipName'
+    put: 
+      tags: ["ships"]
+      description: Update the name of a specific ship
+      operationId: updateShipName
+      requestBody:
+       description: New ship name
+       required: true
+       content:
+        application/json:
+          schema:
+           $ref: '#/components/schemas/ShipName'
+      responses:
+        '204':
+          description: Successful update
+        '400':
+          description: Invalid input or parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+         description: Forbidden. Ship name already exists
+         content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Ship not found.
+          content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+    delete:
+      tags: ["ships"]
+      description: Delete a ship
+      operationId: deleteShip
+      responses:
+        '204':
+          description: Successful delete
+        '404':
+          description: Ship not found.
+          content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+  /ships/{name}/topSpeed: 
+    parameters:
+     - name: name
+       in: path
+       required: true  
+       description: The name of a ship
+       schema:
+        $ref: '#/components/schemas/ShipName'
+    get: 
+      tags: ["ships"]
+      description: Retrieves the top speed of a specific ship
+      operationId: getShipSpeed
+      responses:
+       '200':
+         description: Ship top speed
+         content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/ShipSpeed'
+       '404':
+         description: Ship not found.
+         content:
+          application/json:
+           schema:
+            $ref: '#/components/schemas/ErrorMessage'
+       '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+    put:
+      tags: ["ships"]
+      description: Update the top speed of a specific ship
+      operationId: updateShipSpeed
+      requestBody:
+       description: New ship speed
+       required: true
+       content:
+        application/json:
+          schema:
+           $ref: '#/components/schemas/ShipSpeed'
+      responses:
+        '204':
+          description: Successful update
+        '400':
+          description: Invalid input or parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Ship not found.
+          content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+  /countries:
+    put:
+      tags: ["countries"]
+      description: Adds a new country to the data base
+      operationId: addCountry
+      requestBody:
+       description: Country details
+       required: true
+       content:
+        application/json:
+          schema:
+            type: object
+            description: The name of the country and if it has been visited
+            properties:
+              name:
+                $ref: '#/components/schemas/CountryName'
+              visited:
+                $ref: '#/components/schemas/CountryVisited'
+      responses:
+        '201':
+          description: Country created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShipName'
+        '400':
+          description: Invalid input or parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+    get:
+      tags: ["countries"]
+      description: Retrieves the names of all the countries in the data base
+      operationId: getCountries
+      responses:
+        '200':
+          description: The list of all country names.
+          content:
+            application/json:
+              schema:
+                description: Country names array
+                type: array
+                items:
+                  $ref: '#/components/schemas/CountryName'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+  /countries/{name}:
+    parameters:
+     - name: name
+       in: path
+       required: true  
+       description: The name for a country.
+       schema:
+        $ref: '#/components/schemas/CountryName'
+    put:
+      tags: ["countries"]
+      description: Update a countries name
+      operationId: getCountryName
+      requestBody:
+       description: New country name
+       required: true
+       content:
+        application/json:
+          schema:
+           $ref: '#/components/schemas/CountryName'
+      responses:
+        '204':
+          description: Successful update
+        '403':
+         description: Forbidden. Country name already exists
+         content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/ErrorMessage'
+        '400':
+          description: Invalid input or parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Country not found.
+          content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+    get:
+      tags: ["countries"]
+      description: See if a country has been visited
+      operationId: getCountryVisited
+      responses:
+       '200':
+         description: If a country has been visited
+         content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/CountryVisited'
+       '404':
+          description: Country not found.
+          content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/ErrorMessage'
+       '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+    delete:
+      tags: ["countries"]
+      description: Delete a country
+      operationId: deleteCountry
+      responses:
+        '204':
+          description: Successful delete
+        '404':
+          description: Country not found.
+          content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'  
+  /ports:
+    put:
+      tags: ["ports"]
+      description: Add a new port to the data base
+      operationId: addPort
+      requestBody:
+       description: Port details
+       required: true
+       content:
+        application/json:
+          schema:
+            type: object
+            description: The name and country of the new port
+            properties:
+              name:
+                $ref: '#/components/schemas/PortName'
+              country:
+                $ref: '#/components/schemas/CountryName'
+      responses:
+        '201':
+          description: Port created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PortName'
+        '400':
+          description: Invalid input or parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'  
+    get:
+      tags: ["ports"]
+      description: Get the names of all the ports in the data base
+      operationId: getPorts
+      responses:
+        '200':
+          description: The list of all port names.
+          content:
+            application/json:
+              schema:
+                description: Country names array
+                type: array
+                items:
+                  $ref: '#/components/schemas/PortName'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'  
+  /ports/{name}:
+    parameters:
+     - name: name
+       in: path
+       required: true  
+       description: The name for a port.
+       schema:
+        $ref: '#/components/schemas/PortName'
+    delete:
+      tags: ["ports"]
+      description: Delete a port
+      operationId: deletePort
+      responses:
+        '204':
+          description: Successful delete
+        '404':
+          description: Port not found.
+          content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'  
+    put:
+      tags: ["ports"]
+      description: Updates a port's name
+      operationId: updatePortName
+      requestBody:
+       description: New port name
+       required: true
+       content:
+        application/json:
+          schema:
+           $ref: '#/components/schemas/PortName'
+      responses:
+        '204':
+          description: Successful update
+        '400':
+          description: Invalid input or parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+         description: Forbidden. Port name already exists
+         content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Port not found.
+          content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'  
+
+  /ports/{name}/country:
+    parameters:
+     - name: name
+       in: path
+       required: true  
+       description: The name for a port.
+       schema:
+        $ref: '#/components/schemas/PortName'
+    put:
+      tags: ["ports"]
+      description: Update a port's country ?!
+      operationId: updatePortCountry
+      requestBody:
+       description: New country name
+       required: true
+       content:
+        application/json:
+          schema:
+           $ref: '#/components/schemas/CountryName'
+      responses:
+        '204':
+          description: Successful update
+        '400':
+          description: Invalid input or parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Port not found.
+          content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'  
+    get:
+      tags: ["ports"]
+      description: Get a port's country
+      operationId: getPortCountry
+      responses:
+       '200':
+         description: The name of the country
+         content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/CountryName'
+       '404':
+          description: Port not found.
+          content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/ErrorMessage'
+       '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+  /voyages:
+    put:
+      tags: ["voyages"]
+      description: Add a new voyage.
+      operationId: addVoyage
+      requestBody:
+       description: Voyage details
+       required: true
+       content:
+        application/json:
+          schema:
+            type: object
+            description: The specifications for a voyage
+            properties:
+              date:
+                $ref: '#/components/schemas/Date'
+              departurePort:
+                $ref: '#/components/schemas/PortName'
+              arrivalPort:
+                $ref: '#/components/schemas/PortName'
+              startTime:
+                $ref: '#/components/schemas/Timestamp'
+              endTime:
+                $ref: '#/components/schemas/Timestamp'
+      responses:
+        '201':
+          description: Voyage created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoyageId'
+        '400':
+          description: Invalid input or parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'  
+    get:
+      tags: ["voyages"]
+      description: Get all voyage ids.
+      operationId: getVoyages
+      responses:
+        '200':
+          description: The list of all voyage ids.
+          content:
+            application/json:
+              schema:
+                description: Voyage ids array
+                type: array
+                items:
+                  $ref: '#/components/schemas/VoyageId'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'  
+  /voyages/{id}:
+    parameters:
+     - name: id
+       in: path
+       required: true  
+       description: The id for a voyage.
+       schema:
+        $ref: '#/components/schemas/VoyageId'
+    delete:
+      tags: ["voyages"]
+      description: Delete a voyage
+      operationId: deleteVoyage
+      responses:
+        '204':
+          description: Successful delete
+        '404':
+          description: Voyage not found.
+          content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'  
+  /voyages/{id}/date:
+    parameters:
+     - name: id
+       in: path
+       required: true  
+       description: The id for a voyage.
+       schema:
+        $ref: '#/components/schemas/VoyageId'
+    get:
+      tags: ["voyages"]
+      description: Get a voyage's date
+      operationId: getVoyageDate
+      responses:
+       '200':
+         description: Voyage date
+         content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/Date'
+       '404':
+          description: Voyage not found.
+          content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/ErrorMessage'
+       '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'  
+    put:
+      tags: ["voyages"]
+      description: Update a voyage's date
+      operationId: updateVoyageDate
+      requestBody:
+       description: New date
+       required: true
+       content:
+        application/json:
+          schema:
+           $ref: '#/components/schemas/Date'
+      responses:
+        '204':
+          description: Successful update
+        '400':
+          description: Invalid input or parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Voyage not found.
+          content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+  /voyages/{id}/departurePort:
+    parameters:
+     - name: id
+       in: path
+       required: true  
+       description: The id for a voyage.
+       schema:
+        $ref: '#/components/schemas/VoyageId'
+    get:
+      tags: ["voyages"]
+      description: Get a voyage's departure port
+      operationId: getVoyageDPort
+      responses:
+       '200':
+         description: Voyage departure port
+         content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/PortName'
+       '404':
+          description: Voyage not found.
+          content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/ErrorMessage'
+       '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'  
+    put:
+      tags: ["voyages"]
+      description: Update a voyage's departure port
+      operationId: updateVoyageDPort
+      requestBody:
+       description: New port
+       required: true
+       content:
+        application/json:
+          schema:
+           $ref: '#/components/schemas/PortName'
+      responses:
+        '204':
+          description: Successful update
+        '400':
+          description: Invalid input or parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+         description: Forbidden. Departure port can't be the same as the arrival port
+         content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Voyage not found.
+          content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'  
+
+  /voyages/{id}/arrivalPort:
+    parameters:
+     - name: id
+       in: path
+       required: true  
+       description: The id for a voyage.
+       schema:
+        $ref: '#/components/schemas/VoyageId'
+    get:
+      tags: ["voyages"]
+      description: Get a voyage's arrival port
+      operationId: getVoyageAPort
+      responses:
+       '200':
+         description: Voyage arrival port
+         content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/PortName'
+       '404':
+          description: Voyage not found.
+          content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/ErrorMessage'
+       '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'  
+    put:
+      tags: ["voyages"]
+      description: Update a voyage's arrival port
+      operationId: updateVoyageAPort
+      requestBody:
+       description: New port
+       required: true
+       content:
+        application/json:
+          schema:
+           $ref: '#/components/schemas/PortName'
+      responses:
+        '204':
+          description: Successful update
+        '400':
+          description: Invalid input or parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+         description: Forbidden. Departure port can't be the same as the arrival port
+         content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Voyage not found.
+          content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'  
+  /voyages/{id}/start:
+    parameters:
+     - name: id
+       in: path
+       required: true  
+       description: The id for a voyage.
+       schema:
+        $ref: '#/components/schemas/VoyageId'
+    get:
+      tags: ["voyages"]
+      description: Get a voyage's start time
+      operationId: getVoyageStart
+      responses:
+       '200':
+         description: Voyage start time
+         content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/Timestamp'
+       '404':
+          description: Voyage not found.
+          content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/ErrorMessage'
+       '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'  
+    put:
+      tags: ["voyages"]
+      description: Update a voyage's start time
+      operationId: updateVoyageStart
+      requestBody:
+       description: New port time
+       required: true
+       content:
+        application/json:
+          schema:
+           $ref: '#/components/schemas/Timestamp'
+      responses:
+        '204':
+          description: Successful update
+        '400':
+          description: Invalid input or parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+         description: Forbidden. Start time can't be sooner than end time.
+         content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Voyage not found.
+          content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage' 
+  /voyages/{id}/end:
+    parameters:
+     - name: id
+       in: path
+       required: true  
+       description: The id for a voyage.
+       schema:
+        $ref: '#/components/schemas/VoyageId'
+    get:
+      tags: ["voyages"]
+      description: Get a voyage's end time
+      operationId: getVoyageEnd
+      responses:
+       '200':
+         description: Voyage start time
+         content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/Timestamp'
+       '404':
+          description: Voyage not found.
+          content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/ErrorMessage'
+       '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage' 
+    put:
+      tags: ["voyages"]
+      description: Update a voyage's end time
+      operationId: updateVoyageEnd
+      requestBody:
+       description: New port time
+       required: true
+       content:
+        application/json:
+          schema:
+           $ref: '#/components/schemas/Timestamp'
+      responses:
+        '204':
+          description: Successful update
+        '400':
+          description: Invalid input or parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage'
+        '403':
+         description: Forbidden. End time can't be later than start time.
+         content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/ErrorMessage'
+        '404':
+          description: Voyage not found.
+          content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/ErrorMessage'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage' 
+components: 
+  schemas:
+    VoyageId:
+      type: integer
+      description: The unique identifier for a voyage.
+      example: 12
+    ShipSpeed:
+      type: integer
+      description: A ships top speed.
+      example: 80
+    ShipName:
+      type: string
+      description: The name of a ship.  Also functions as unique identifier.
+      pattern: '^.*?$'
+      example: Titanic
+    CountryName:
+      type: string
+      description: The name of a country. Also functions as unique identifier.
+      pattern: '^.*?$'
+      example: France
+    CountryVisited:
+      type: boolean
+      description: Indicates if a country has been visited.
+    PortName:
+      type: string
+      description: The name of a port.  Also functions as unique identifier.
+      pattern: '^.*?$'
+      example: Brindisi
+    Timestamp:
+      type: string
+      format: date-time
+      description: A time used for arrivals/departures.
+      example: "2024-11-27T10:00:00Z"
+    Date:
+      type: string
+      format: date
+      description: Used for a voyage's date.
+      example: "2017-07-21"
+    ErrorMessage:
+      type: string
+      pattern: '^.*?$'
+      example: Error
+      description: Error Message

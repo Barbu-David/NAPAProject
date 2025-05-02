@@ -1,0 +1,9 @@
+/* src/styles.css */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #2b2b2b;   
+    color: #e0e0e0;             
+  }
+  

@@ -1,0 +1,1 @@
+ dotnet run --project NAPAProjectBackend/src/NAPAProject/NAPAProject.csproj

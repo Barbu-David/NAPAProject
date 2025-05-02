@@ -1,0 +1,708 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NAPAProject</name>
+    </assembly>
+    <members>
+        <member name="T:NAPAProject.Attributes.ValidateModelStateAttribute">
+            <summary>
+            Model state validation attribute
+            </summary>
+        </member>
+        <member name="M:NAPAProject.Attributes.ValidateModelStateAttribute.OnActionExecuting(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext)">
+            <summary>
+            Called before the action method is invoked
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="T:NAPAProject.Controllers.CountriesApiController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:NAPAProject.Controllers.CountriesApiController.AddCountry(NAPAProject.Models.AddCountryRequest)">
+            <summary>
+            
+            </summary>
+            <remarks>Adds a new country to the data base</remarks>
+            <param name="addCountryRequest">Country details</param>
+            <response code="201">Country created successfully</response>
+            <response code="400">Invalid input or parameters.</response>
+            <response code="500">Internal server error</response>
+        </member>
+        <member name="M:NAPAProject.Controllers.CountriesApiController.DeleteCountry(System.String)">
+            <summary>
+            
+            </summary>
+            <remarks>Delete a country</remarks>
+            <param name="name">The name for a country.</param>
+            <response code="204">Successful delete</response>
+            <response code="404">Country not found.</response>
+            <response code="500">Internal server error</response>
+        </member>
+        <member name="M:NAPAProject.Controllers.CountriesApiController.GetCountries">
+            <summary>
+            
+            </summary>
+            <remarks>Retrieves the names of all the countries in the data base</remarks>
+            <response code="200">The list of all country names.</response>
+            <response code="500">Internal server error</response>
+        </member>
+        <member name="M:NAPAProject.Controllers.CountriesApiController.GetCountryName(System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <remarks>Update a countries name</remarks>
+            <param name="name">The name for a country.</param>
+            <param name="body">New country name</param>
+            <response code="204">Successful update</response>
+            <response code="400">Invalid input or parameters.</response>
+            <response code="404">Country not found.</response>
+            <response code="500">Internal server error</response>
+        </member>
+        <member name="M:NAPAProject.Controllers.CountriesApiController.GetCountryVisited(System.String)">
+            <summary>
+            
+            </summary>
+            <remarks>See if a country has been visited</remarks>
+            <param name="name">The name for a country.</param>
+            <response code="200">If a country has been visited</response>
+            <response code="404">Country not found.</response>
+            <response code="500">Internal server error</response>
+        </member>
+        <member name="T:NAPAProject.Controllers.PortsApiController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:NAPAProject.Controllers.PortsApiController.AddPort(NAPAProject.Models.AddPortRequest)">
+            <summary>
+            
+            </summary>
+            <remarks>Add a new port to the data base</remarks>
+            <param name="addPortRequest">Port details</param>
+            <response code="201">Port created successfully</response>
+            <response code="400">Invalid input or parameters.</response>
+            <response code="500">Internal server error</response>
+        </member>
+        <member name="M:NAPAProject.Controllers.PortsApiController.DeletePort(System.String)">
+            <summary>
+            
+            </summary>
+            <remarks>Delete a port</remarks>
+            <param name="name">The name for a port.</param>
+            <response code="204">Successful delete</response>
+            <response code="404">Port not found.</response>
+            <response code="500">Internal server error</response>
+        </member>
+        <member name="M:NAPAProject.Controllers.PortsApiController.GetPorts">
+            <summary>
+            
+            </summary>
+            <remarks>Get the names of all the ports in the data base</remarks>
+            <response code="200">The list of all port names.</response>
+            <response code="500">Internal server error</response>
+        </member>
+        <member name="M:NAPAProject.Controllers.PortsApiController.UpdatePortCountry(System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <remarks>Update a port&#39;s country ?!</remarks>
+            <param name="name">The name for a port.</param>
+            <param name="body">New country name</param>
+            <response code="204">Successful update</response>
+            <response code="400">Invalid input or parameters.</response>
+            <response code="404">Port not found.</response>
+            <response code="500">Internal server error</response>
+        </member>
+        <member name="M:NAPAProject.Controllers.PortsApiController.UpdatePortName(System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <remarks>Updates a port&#39;s name</remarks>
+            <param name="name">The name for a port.</param>
+            <param name="body">New port name</param>
+            <response code="204">Successful update</response>
+            <response code="400">Invalid input or parameters.</response>
+            <response code="404">Port not found.</response>
+            <response code="500">Internal server error</response>
+        </member>
+        <member name="T:NAPAProject.Controllers.ShipsApiController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:NAPAProject.Controllers.ShipsApiController._context">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:NAPAProject.Controllers.ShipsApiController.AddShip(NAPAProject.Models.AddShipRequest)">
+            <remarks>Adds a new ship to the data base</remarks>
+            <param name="addShipRequest">Ship details</param>
+            <response code="201">Ship created successfully</response>
+            <response code="400">Invalid input or parameters.</response>
+            <response code="500">Internal server error</response>
+        </member>
+        <member name="M:NAPAProject.Controllers.ShipsApiController.DeleteShip(System.String)">
+            <summary>
+            
+            </summary>
+            <remarks>Delete a ship</remarks>
+            <param name="name">The name for a ship.</param>
+            <response code="204">Successful delete</response>
+            <response code="404">Ship not found.</response>
+            <response code="500">Internal server error</response>
+        </member>
+        <member name="M:NAPAProject.Controllers.ShipsApiController.GetShipSpeed(System.String)">
+            <summary>
+            
+            </summary>
+            <remarks>Retrieves the top speed of a specific ship</remarks>
+            <param name="name">The name for a ship.</param>
+            <response code="200">Ship top speed</response>
+            <response code="404">Ship not found.</response>
+            <response code="500">Internal server error</response>
+        </member>
+        <member name="M:NAPAProject.Controllers.ShipsApiController.GetShips">
+            <summary>
+            
+            </summary>
+            <remarks>Retrieves the names of all the ships</remarks>
+            <response code="200">The list of all ship names.</response>
+            <response code="500">Internal server error</response>
+        </member>
+        <member name="M:NAPAProject.Controllers.ShipsApiController.UpdateShipName(System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <remarks>Update the name of a specific ship</remarks>
+            <param name="name">The name for a ship.</param>
+            <param name="body">New ship name</param>
+            <response code="204">Successful update</response>
+            <response code="400">Invalid input or parameters.</response>
+            <response code="404">Ship not found.</response>
+            <response code="500">Internal server error</response>
+        </member>
+        <member name="M:NAPAProject.Controllers.ShipsApiController.UpdateShipSpeed(System.String,System.Int32)">
+            <summary>
+            
+            </summary>
+            <remarks>Update the top speed of a specific ship</remarks>
+            <param name="name">The sname for a ship.</param>
+            <param name="body">New ship speed</param>
+            <response code="204">Successful update</response>
+            <response code="400">Invalid input or parameters.</response>
+            <response code="404">Ship not found.</response>
+            <response code="500">Internal server error</response>
+        </member>
+        <member name="T:NAPAProject.Controllers.VoyagesApiController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:NAPAProject.Controllers.VoyagesApiController.AddVoyage(NAPAProject.Models.AddVoyageRequest)">
+            <summary>
+            
+            </summary>
+            <remarks>Add a new voyage.</remarks>
+            <param name="addVoyageRequest">Voyage details</param>
+            <response code="201">Voyage created successfully</response>
+            <response code="400">Invalid input or parameters.</response>
+            <response code="500">Internal server error</response>
+        </member>
+        <member name="M:NAPAProject.Controllers.VoyagesApiController.DeleteVoyage(System.Int32)">
+            <summary>
+            
+            </summary>
+            <remarks>Delete a voyage</remarks>
+            <param name="id">The id for a voyage.</param>
+            <response code="204">Successful delete</response>
+            <response code="404">Voyage not found.</response>
+            <response code="500">Internal server error</response>
+        </member>
+        <member name="M:NAPAProject.Controllers.VoyagesApiController.GetVoyageAPort(System.Int32)">
+            <summary>
+            
+            </summary>
+            <remarks>Get a voyage&#39;s arrival port</remarks>
+            <param name="id">The id for a voyage.</param>
+            <response code="200">Voyage arrival port</response>
+            <response code="404">Voyage not found.</response>
+            <response code="500">Internal server error</response>
+        </member>
+        <member name="M:NAPAProject.Controllers.VoyagesApiController.GetVoyageDPort(System.Int32)">
+            <summary>
+            
+            </summary>
+            <remarks>Get a voyage&#39;s departure port</remarks>
+            <param name="id">The id for a voyage.</param>
+            <response code="200">Voyage departure port</response>
+            <response code="404">Voyage not found.</response>
+            <response code="500">Internal server error</response>
+        </member>
+        <member name="M:NAPAProject.Controllers.VoyagesApiController.GetVoyageDate(System.Int32)">
+            <summary>
+            
+            </summary>
+            <remarks>Get a voyage&#39;s date</remarks>
+            <param name="id">The id for a voyage.</param>
+            <response code="200">Voyage date</response>
+            <response code="404">Voyage not found.</response>
+            <response code="500">Internal server error</response>
+        </member>
+        <member name="M:NAPAProject.Controllers.VoyagesApiController.GetVoyageEnd(System.Int32)">
+            <summary>
+            
+            </summary>
+            <remarks>Get a voyage&#39;s end time</remarks>
+            <param name="id">The id for a voyage.</param>
+            <response code="200">Voyage start time</response>
+            <response code="404">Voyage not found.</response>
+            <response code="500">Internal server error</response>
+        </member>
+        <member name="M:NAPAProject.Controllers.VoyagesApiController.GetVoyageStart(System.Int32)">
+            <summary>
+            
+            </summary>
+            <remarks>Get a voyage&#39;s start time</remarks>
+            <param name="id">The id for a voyage.</param>
+            <response code="200">Voyage start time</response>
+            <response code="404">Voyage not found.</response>
+            <response code="500">Internal server error</response>
+        </member>
+        <member name="M:NAPAProject.Controllers.VoyagesApiController.GetVoyages">
+            <summary>
+            
+            </summary>
+            <remarks>Get all voyage ids.</remarks>
+            <response code="200">The list of all voyage ids.</response>
+            <response code="500">Internal server error</response>
+        </member>
+        <member name="M:NAPAProject.Controllers.VoyagesApiController.UpdateVoyageAPort(System.Int32,System.String)">
+            <summary>
+            
+            </summary>
+            <remarks>Update a voyage&#39;s arrival port</remarks>
+            <param name="id">The id for a voyage.</param>
+            <param name="body">New port</param>
+            <response code="204">Successful update</response>
+            <response code="400">Invalid input or parameters.</response>
+            <response code="403">Forbidden. Departure port can&#39;t be the same as the arrival port</response>
+            <response code="404">Voyage not found.</response>
+            <response code="500">Internal server error</response>
+        </member>
+        <member name="M:NAPAProject.Controllers.VoyagesApiController.UpdateVoyageDPort(System.Int32,System.String)">
+            <summary>
+            
+            </summary>
+            <remarks>Update a voyage&#39;s departure port</remarks>
+            <param name="id">The id for a voyage.</param>
+            <param name="body">New port</param>
+            <response code="204">Successful update</response>
+            <response code="400">Invalid input or parameters.</response>
+            <response code="403">Forbidden. Departure port can&#39;t be the same as the arrival port</response>
+            <response code="404">Voyage not found.</response>
+            <response code="500">Internal server error</response>
+        </member>
+        <member name="M:NAPAProject.Controllers.VoyagesApiController.UpdateVoyageDate(System.Int32,System.DateOnly)">
+            <summary>
+            
+            </summary>
+            <remarks>Update a voyage&#39;s date</remarks>
+            <param name="id">The id for a voyage.</param>
+            <param name="body">New date</param>
+            <response code="204">Successful update</response>
+            <response code="400">Invalid input or parameters.</response>
+            <response code="404">Voyage not found.</response>
+            <response code="500">Internal server error</response>
+        </member>
+        <member name="M:NAPAProject.Controllers.VoyagesApiController.UpdateVoyageEnd(System.Int32,System.DateTime)">
+            <summary>
+            
+            </summary>
+            <remarks>Update a voyage&#39;s end time</remarks>
+            <param name="id">The id for a voyage.</param>
+            <param name="body">New port time</param>
+            <response code="204">Successful update</response>
+            <response code="400">Invalid input or parameters.</response>
+            <response code="403">Forbidden. End time can&#39;t be later than start time.</response>
+            <response code="404">Voyage not found.</response>
+            <response code="500">Internal server error</response>
+        </member>
+        <member name="M:NAPAProject.Controllers.VoyagesApiController.UpdateVoyageStart(System.Int32,System.DateTime)">
+            <summary>
+            
+            </summary>
+            <remarks>Update a voyage&#39;s start time</remarks>
+            <param name="id">The id for a voyage.</param>
+            <param name="body">New port time</param>
+            <response code="204">Successful update</response>
+            <response code="400">Invalid input or parameters.</response>
+            <response code="403">Forbidden. Start time can&#39;t be sooner than end time.</response>
+            <response code="404">Voyage not found.</response>
+            <response code="500">Internal server error</response>
+        </member>
+        <member name="T:NAPAProject.Converters.CustomEnumConverter`1">
+            <summary>
+            Custom string to enum converter
+            </summary>
+        </member>
+        <member name="M:NAPAProject.Converters.CustomEnumConverter`1.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext,System.Type)">
+            <summary>
+            Determine if we can convert a type to an enum
+            </summary>
+            <param name="context"></param>
+            <param name="sourceType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NAPAProject.Converters.CustomEnumConverter`1.ConvertFrom(System.ComponentModel.ITypeDescriptorContext,System.Globalization.CultureInfo,System.Object)">
+            <summary>
+            Convert from a type value to an enum
+            </summary>
+            <param name="context"></param>
+            <param name="culture"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="T:NAPAProject.Filters.BasePathFilter">
+            <summary>
+            BasePath Document Filter sets BasePath property of OpenAPI and removes it from the individual URL paths
+            </summary>
+        </member>
+        <member name="M:NAPAProject.Filters.BasePathFilter.#ctor(System.String)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="basePath">BasePath to remove from Operations</param>
+        </member>
+        <member name="P:NAPAProject.Filters.BasePathFilter.BasePath">
+            <summary>
+            Gets the BasePath of the OpenAPI Doc
+            </summary>
+            <returns>The BasePath of the OpenAPI Doc</returns>
+        </member>
+        <member name="M:NAPAProject.Filters.BasePathFilter.Apply(Microsoft.OpenApi.Models.OpenApiDocument,Swashbuckle.AspNetCore.SwaggerGen.DocumentFilterContext)">
+            <summary>
+            Apply the filter
+            </summary>
+            <param name="openapiDoc">OpenApiDocument</param>
+            <param name="context">FilterContext</param>
+        </member>
+        <member name="T:NAPAProject.Filters.GeneratePathParamsValidationFilter">
+            <summary>
+            Path Parameter Validation Rules Filter
+            </summary>
+        </member>
+        <member name="M:NAPAProject.Filters.GeneratePathParamsValidationFilter.Apply(Microsoft.OpenApi.Models.OpenApiOperation,Swashbuckle.AspNetCore.SwaggerGen.OperationFilterContext)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="operation">Operation</param>
+            <param name="context">OperationFilterContext</param>
+        </member>
+        <member name="T:NAPAProject.Formatters.InputFormatterStream">
+            <inheritdoc />
+        </member>
+        <member name="M:NAPAProject.Formatters.InputFormatterStream.#ctor">
+            <inheritdoc />
+        </member>
+        <member name="M:NAPAProject.Formatters.InputFormatterStream.ReadRequestBodyAsync(Microsoft.AspNetCore.Mvc.Formatters.InputFormatterContext)">
+            <inheritdoc />
+        </member>
+        <member name="M:NAPAProject.Formatters.InputFormatterStream.CanReadType(System.Type)">
+            <inheritdoc />
+        </member>
+        <member name="T:NAPAProject.Migrations.InitialCreate">
+            <inheritdoc />
+        </member>
+        <member name="M:NAPAProject.Migrations.InitialCreate.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:NAPAProject.Migrations.InitialCreate.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:NAPAProject.Migrations.InitialCreate.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:NAPAProject.Models.AddCountryRequest">
+            <summary>
+            The name of the country and if it has been visited
+            </summary>
+        </member>
+        <member name="P:NAPAProject.Models.AddCountryRequest.Name">
+            <summary>
+            The name of a country. Also functions as unique identifier.
+            </summary>
+            <value>The name of a country. Also functions as unique identifier.</value>
+        </member>
+        <member name="P:NAPAProject.Models.AddCountryRequest.Visited">
+            <summary>
+            Indicates if a country has been visited.
+            </summary>
+            <value>Indicates if a country has been visited.</value>
+        </member>
+        <member name="M:NAPAProject.Models.AddCountryRequest.ToString">
+            <summary>
+            Returns the string presentation of the object
+            </summary>
+            <returns>String presentation of the object</returns>
+        </member>
+        <member name="M:NAPAProject.Models.AddCountryRequest.ToJson">
+            <summary>
+            Returns the JSON string presentation of the object
+            </summary>
+            <returns>JSON string presentation of the object</returns>
+        </member>
+        <member name="M:NAPAProject.Models.AddCountryRequest.Equals(System.Object)">
+            <summary>
+            Returns true if objects are equal
+            </summary>
+            <param name="obj">Object to be compared</param>
+            <returns>Boolean</returns>
+        </member>
+        <member name="M:NAPAProject.Models.AddCountryRequest.Equals(NAPAProject.Models.AddCountryRequest)">
+            <summary>
+            Returns true if AddCountryRequest instances are equal
+            </summary>
+            <param name="other">Instance of AddCountryRequest to be compared</param>
+            <returns>Boolean</returns>
+        </member>
+        <member name="M:NAPAProject.Models.AddCountryRequest.GetHashCode">
+            <summary>
+            Gets the hash code
+            </summary>
+            <returns>Hash code</returns>
+        </member>
+        <member name="T:NAPAProject.Models.AddPortRequest">
+            <summary>
+            The name and country of the new port
+            </summary>
+        </member>
+        <member name="P:NAPAProject.Models.AddPortRequest.Name">
+            <summary>
+            The name of a port.  Also functions as unique identifier.
+            </summary>
+            <value>The name of a port.  Also functions as unique identifier.</value>
+        </member>
+        <member name="P:NAPAProject.Models.AddPortRequest.Country">
+            <summary>
+            The name of a country. Also functions as unique identifier.
+            </summary>
+            <value>The name of a country. Also functions as unique identifier.</value>
+        </member>
+        <member name="M:NAPAProject.Models.AddPortRequest.ToString">
+            <summary>
+            Returns the string presentation of the object
+            </summary>
+            <returns>String presentation of the object</returns>
+        </member>
+        <member name="M:NAPAProject.Models.AddPortRequest.ToJson">
+            <summary>
+            Returns the JSON string presentation of the object
+            </summary>
+            <returns>JSON string presentation of the object</returns>
+        </member>
+        <member name="M:NAPAProject.Models.AddPortRequest.Equals(System.Object)">
+            <summary>
+            Returns true if objects are equal
+            </summary>
+            <param name="obj">Object to be compared</param>
+            <returns>Boolean</returns>
+        </member>
+        <member name="M:NAPAProject.Models.AddPortRequest.Equals(NAPAProject.Models.AddPortRequest)">
+            <summary>
+            Returns true if AddPortRequest instances are equal
+            </summary>
+            <param name="other">Instance of AddPortRequest to be compared</param>
+            <returns>Boolean</returns>
+        </member>
+        <member name="M:NAPAProject.Models.AddPortRequest.GetHashCode">
+            <summary>
+            Gets the hash code
+            </summary>
+            <returns>Hash code</returns>
+        </member>
+        <member name="T:NAPAProject.Models.AddShipRequest">
+            <summary>
+            The name and speed of the new ship
+            </summary>
+        </member>
+        <member name="P:NAPAProject.Models.AddShipRequest.Name">
+            <summary>
+            The name of a ship.  Also functions as unique identifier.
+            </summary>
+            <value>The name of a ship.  Also functions as unique identifier.</value>
+        </member>
+        <member name="P:NAPAProject.Models.AddShipRequest.Speed">
+            <summary>
+            A ships top speed.
+            </summary>
+            <value>A ships top speed.</value>
+        </member>
+        <member name="M:NAPAProject.Models.AddShipRequest.ToString">
+            <summary>
+            Returns the string presentation of the object
+            </summary>
+            <returns>String presentation of the object</returns>
+        </member>
+        <member name="M:NAPAProject.Models.AddShipRequest.ToJson">
+            <summary>
+            Returns the JSON string presentation of the object
+            </summary>
+            <returns>JSON string presentation of the object</returns>
+        </member>
+        <member name="M:NAPAProject.Models.AddShipRequest.Equals(System.Object)">
+            <summary>
+            Returns true if objects are equal
+            </summary>
+            <param name="obj">Object to be compared</param>
+            <returns>Boolean</returns>
+        </member>
+        <member name="M:NAPAProject.Models.AddShipRequest.Equals(NAPAProject.Models.AddShipRequest)">
+            <summary>
+            Returns true if AddShipRequest instances are equal
+            </summary>
+            <param name="other">Instance of AddShipRequest to be compared</param>
+            <returns>Boolean</returns>
+        </member>
+        <member name="M:NAPAProject.Models.AddShipRequest.GetHashCode">
+            <summary>
+            Gets the hash code
+            </summary>
+            <returns>Hash code</returns>
+        </member>
+        <member name="T:NAPAProject.Models.AddVoyageRequest">
+            <summary>
+            The specifications for a voyage
+            </summary>
+        </member>
+        <member name="P:NAPAProject.Models.AddVoyageRequest.Date">
+            <summary>
+            Used for a voyage&#39;s date.
+            </summary>
+            <value>Used for a voyage&#39;s date.</value>
+        </member>
+        <member name="P:NAPAProject.Models.AddVoyageRequest.DeparturePort">
+            <summary>
+            The name of a port.  Also functions as unique identifier.
+            </summary>
+            <value>The name of a port.  Also functions as unique identifier.</value>
+        </member>
+        <member name="P:NAPAProject.Models.AddVoyageRequest.ArrivalPort">
+            <summary>
+            The name of a port.  Also functions as unique identifier.
+            </summary>
+            <value>The name of a port.  Also functions as unique identifier.</value>
+        </member>
+        <member name="P:NAPAProject.Models.AddVoyageRequest.StartTime">
+            <summary>
+            A time used for arrivals/departures.
+            </summary>
+            <value>A time used for arrivals/departures.</value>
+        </member>
+        <member name="P:NAPAProject.Models.AddVoyageRequest.EndTime">
+            <summary>
+            A time used for arrivals/departures.
+            </summary>
+            <value>A time used for arrivals/departures.</value>
+        </member>
+        <member name="M:NAPAProject.Models.AddVoyageRequest.ToString">
+            <summary>
+            Returns the string presentation of the object
+            </summary>
+            <returns>String presentation of the object</returns>
+        </member>
+        <member name="M:NAPAProject.Models.AddVoyageRequest.ToJson">
+            <summary>
+            Returns the JSON string presentation of the object
+            </summary>
+            <returns>JSON string presentation of the object</returns>
+        </member>
+        <member name="M:NAPAProject.Models.AddVoyageRequest.Equals(System.Object)">
+            <summary>
+            Returns true if objects are equal
+            </summary>
+            <param name="obj">Object to be compared</param>
+            <returns>Boolean</returns>
+        </member>
+        <member name="M:NAPAProject.Models.AddVoyageRequest.Equals(NAPAProject.Models.AddVoyageRequest)">
+            <summary>
+            Returns true if AddVoyageRequest instances are equal
+            </summary>
+            <param name="other">Instance of AddVoyageRequest to be compared</param>
+            <returns>Boolean</returns>
+        </member>
+        <member name="M:NAPAProject.Models.AddVoyageRequest.GetHashCode">
+            <summary>
+            Gets the hash code
+            </summary>
+            <returns>Hash code</returns>
+        </member>
+        <member name="T:NAPAProject.OpenApi.TypeExtensions">
+            <summary>
+            Replacement utilities from Swashbuckle.AspNetCore.SwaggerGen which are not in 5.x
+            </summary>
+        </member>
+        <member name="M:NAPAProject.OpenApi.TypeExtensions.FriendlyId(System.Type,System.Boolean)">
+            <summary>
+            Produce a friendly name for the type which is unique.
+            </summary>
+            <param name="type"></param>
+            <param name="fullyQualified"></param>
+        </member>
+        <member name="M:NAPAProject.OpenApi.TypeExtensions.FullNameSansTypeParameters(System.Type)">
+            <summary>
+            Determine the fully qualified type name without type parameters.
+            </summary>
+            <param name="type"></param>
+        </member>
+        <member name="T:NAPAProject.Program">
+            <summary>
+            Program
+            </summary>
+        </member>
+        <member name="M:NAPAProject.Program.Main(System.String[])">
+            <summary>
+            Main
+            </summary>
+            <param name="args"></param>
+        </member>
+        <member name="M:NAPAProject.Program.CreateHostBuilder(System.String[])">
+            <summary>
+            Create the host builder.
+            </summary>
+            <param name="args"></param>
+            <returns>IHostBuilder</returns>
+        </member>
+        <member name="T:NAPAProject.Startup">
+            <summary>
+            Startup
+            </summary>
+        </member>
+        <member name="M:NAPAProject.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="configuration"></param>
+        </member>
+        <member name="P:NAPAProject.Startup.Configuration">
+            <summary>
+            The application configuration.
+            </summary>
+        </member>
+        <member name="M:NAPAProject.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            This method gets called by the runtime. Use this method to add services to the container.
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:NAPAProject.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+            <summary>
+            This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+            </summary>
+            <param name="app"></param>
+            <param name="env"></param>
+        </member>
+    </members>
+</doc>

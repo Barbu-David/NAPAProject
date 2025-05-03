@@ -59,7 +59,10 @@ namespace NAPAProject.Controllers
         public async Task<IActionResult> AddVoyage([FromBody]AddVoyageRequest addVoyageRequest)
         {
             if (!ModelState.IsValid)
-                return BadRequest("Invalid port data.");
+                return BadRequest("Invalid voyage data.");
+
+            if(addVoyageRequest.StartTime>addVoyageRequest.EndTime)
+                return BadRequest("Invalid voyage data.  Start time must be no later than end time");
 
             bool portArrivalExists = await _context.Ports.AnyAsync(c => c.Name == addVoyageRequest.ArrivalPort);
             if (!portArrivalExists)
@@ -147,7 +150,20 @@ namespace NAPAProject.Controllers
         [SwaggerResponse(statusCode: 500, type: typeof(string), description: "Internal server error")]
         public async Task<IActionResult> GetVoyageAPort([FromRoute (Name = "id")][Required]int id)
         {
-            
+            try
+            {
+            var voyage = await _context.Voyages.FirstOrDefaultAsync(s => s.Id == id);
+
+            if (voyage == null)
+            {
+            return NotFound($"Voyage not found.");
+            }
+            return Ok(voyage.ArrivalPort);
+            }
+            catch (Exception)
+            {
+            return StatusCode(500, "A database error occurred.");
+            }
         }
 
         /// <summary>
@@ -165,25 +181,22 @@ namespace NAPAProject.Controllers
         [SwaggerResponse(statusCode: 200, type: typeof(string), description: "Voyage departure port")]
         [SwaggerResponse(statusCode: 404, type: typeof(string), description: "Voyage not found.")]
         [SwaggerResponse(statusCode: 500, type: typeof(string), description: "Internal server error")]
-        public virtual IActionResult GetVoyageDPort([FromRoute (Name = "id")][Required]int id)
+        public async Task<IActionResult> GetVoyageDPort([FromRoute (Name = "id")][Required]int id)
         {
+            try
+            {
+            var voyage = await _context.Voyages.FirstOrDefaultAsync(s => s.Id == id);
 
-            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(200, default);
-            //TODO: Uncomment the next line to return response 404 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(404, default);
-            //TODO: Uncomment the next line to return response 500 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(500, default);
-            string exampleJson = null;
-            exampleJson = "\"Brindisi\"";
-            exampleJson = "\"Error\"";
-            exampleJson = "\"Error\"";
-            
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<string>(exampleJson)
-            : default;
-            //TODO: Change the data returned
-            return new ObjectResult(example);
+            if (voyage == null)
+            {
+            return NotFound($"Voyage not found.");
+            }
+            return Ok(voyage.DeparturePort);
+            }
+            catch (Exception)
+            {
+            return StatusCode(500, "A database error occurred.");
+            }
         }
 
         /// <summary>
@@ -201,25 +214,22 @@ namespace NAPAProject.Controllers
         [SwaggerResponse(statusCode: 200, type: typeof(DateOnly), description: "Voyage date")]
         [SwaggerResponse(statusCode: 404, type: typeof(string), description: "Voyage not found.")]
         [SwaggerResponse(statusCode: 500, type: typeof(string), description: "Internal server error")]
-        public virtual IActionResult GetVoyageDate([FromRoute (Name = "id")][Required]int id)
+        public async Task<IActionResult> GetVoyageDate([FromRoute (Name = "id")][Required]int id)
         {
+            try
+            {
+            var voyage = await _context.Voyages.FirstOrDefaultAsync(s => s.Id == id);
 
-            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(200, default);
-            //TODO: Uncomment the next line to return response 404 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(404, default);
-            //TODO: Uncomment the next line to return response 500 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(500, default);
-            string exampleJson = null;
-            exampleJson = "\"2017-07-21T00:00:00.000+00:00\"";
-            exampleJson = "\"Error\"";
-            exampleJson = "\"Error\"";
-            
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<DateOnly>(exampleJson)
-            : default;
-            //TODO: Change the data returned
-            return new ObjectResult(example);
+            if (voyage == null)
+            {
+            return NotFound($"Voyage not found.");
+            }
+            return Ok(voyage.Date);
+            }
+            catch (Exception)
+            {
+            return StatusCode(500, "A database error occurred.");
+            }
         }
 
         /// <summary>
@@ -237,25 +247,22 @@ namespace NAPAProject.Controllers
         [SwaggerResponse(statusCode: 200, type: typeof(DateTime), description: "Voyage start time")]
         [SwaggerResponse(statusCode: 404, type: typeof(string), description: "Voyage not found.")]
         [SwaggerResponse(statusCode: 500, type: typeof(string), description: "Internal server error")]
-        public virtual IActionResult GetVoyageEnd([FromRoute (Name = "id")][Required]int id)
+        public async Task<IActionResult> GetVoyageEnd([FromRoute (Name = "id")][Required]int id)
         {
+            try
+            {
+            var voyage = await _context.Voyages.FirstOrDefaultAsync(s => s.Id == id);
 
-            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(200, default);
-            //TODO: Uncomment the next line to return response 404 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(404, default);
-            //TODO: Uncomment the next line to return response 500 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(500, default);
-            string exampleJson = null;
-            exampleJson = "\"2024-11-27T10:00:00Z\"";
-            exampleJson = "\"Error\"";
-            exampleJson = "\"Error\"";
-            
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<DateTime>(exampleJson)
-            : default;
-            //TODO: Change the data returned
-            return new ObjectResult(example);
+            if (voyage == null)
+            {
+            return NotFound($"Voyage not found.");
+            }
+            return Ok(voyage.EndTime);
+            }
+            catch (Exception)
+            {
+            return StatusCode(500, "A database error occurred.");
+            }
         }
 
         /// <summary>
@@ -273,25 +280,22 @@ namespace NAPAProject.Controllers
         [SwaggerResponse(statusCode: 200, type: typeof(DateTime), description: "Voyage start time")]
         [SwaggerResponse(statusCode: 404, type: typeof(string), description: "Voyage not found.")]
         [SwaggerResponse(statusCode: 500, type: typeof(string), description: "Internal server error")]
-        public virtual IActionResult GetVoyageStart([FromRoute (Name = "id")][Required]int id)
+        public async Task<IActionResult> GetVoyageStart([FromRoute (Name = "id")][Required]int id)
         {
+            try
+            {
+            var voyage = await _context.Voyages.FirstOrDefaultAsync(s => s.Id == id);
 
-            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(200, default);
-            //TODO: Uncomment the next line to return response 404 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(404, default);
-            //TODO: Uncomment the next line to return response 500 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(500, default);
-            string exampleJson = null;
-            exampleJson = "\"2024-11-27T10:00:00Z\"";
-            exampleJson = "\"Error\"";
-            exampleJson = "\"Error\"";
-            
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<DateTime>(exampleJson)
-            : default;
-            //TODO: Change the data returned
-            return new ObjectResult(example);
+            if (voyage == null)
+            {
+            return NotFound($"Voyage not found.");
+            }
+            return Ok(voyage.StartTime);
+            }
+            catch (Exception)
+            {
+            return StatusCode(500, "A database error occurred.");
+            }
         }
 
         /// <summary>
@@ -306,22 +310,19 @@ namespace NAPAProject.Controllers
         [SwaggerOperation("GetVoyages")]
         [SwaggerResponse(statusCode: 200, type: typeof(List<int>), description: "The list of all voyage ids.")]
         [SwaggerResponse(statusCode: 500, type: typeof(string), description: "Internal server error")]
-        public virtual IActionResult GetVoyages()
+        public async Task<IActionResult> GetVoyages()
         {
+                try
+                {
+                    var allVoyages = await _context.Voyages.ToListAsync(); 
+                    var voyageIds = allVoyages.Select(s => s.Id).ToList(); 
 
-            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(200, default);
-            //TODO: Uncomment the next line to return response 500 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(500, default);
-            string exampleJson = null;
-            exampleJson = "[ 12, 12 ]";
-            exampleJson = "\"Error\"";
-            
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<List<int>>(exampleJson)
-            : default;
-            //TODO: Change the data returned
-            return new ObjectResult(example);
+                    return Ok(voyageIds);
+                }
+                catch (Exception)
+                {
+                    return StatusCode(500, "A database error occurred.");
+                }
         }
 
         /// <summary>
@@ -344,23 +345,31 @@ namespace NAPAProject.Controllers
         [SwaggerResponse(statusCode: 403, type: typeof(string), description: "Forbidden. Departure port can&#39;t be the same as the arrival port")]
         [SwaggerResponse(statusCode: 404, type: typeof(string), description: "Voyage not found.")]
         [SwaggerResponse(statusCode: 500, type: typeof(string), description: "Internal server error")]
-        public virtual IActionResult UpdateVoyageAPort([FromRoute (Name = "id")][Required]int id, [FromBody]string body)
+        public async Task<IActionResult> UpdateVoyageAPort([FromRoute (Name = "id")][Required]int id, [FromBody]string body)
         {
+            try
+            {
+            var voyage = await _context.Voyages.FirstOrDefaultAsync(s => s.Id == id);
 
-            //TODO: Uncomment the next line to return response 204 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(204);
-            //TODO: Uncomment the next line to return response 400 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(400, default);
-            //TODO: Uncomment the next line to return response 403 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(403, default);
-            //TODO: Uncomment the next line to return response 404 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(404, default);
-            //TODO: Uncomment the next line to return response 500 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(500, default);
+            if (voyage == null)
+            {
+                return NotFound($"Voyage not found.");
+            }
 
-            throw new NotImplementedException();
+            bool portExists = await _context.Ports.AnyAsync(c => c.Name == body);
+            if (!portExists)
+                return BadRequest($"Port '{body}' does not exist.");
+
+            voyage.ArrivalPort = body;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+            }
+            catch (Exception)
+            {
+            return StatusCode(500, "A database error occurred.");
+            }
         }
-
         /// <summary>
         /// 
         /// </summary>
@@ -381,23 +390,32 @@ namespace NAPAProject.Controllers
         [SwaggerResponse(statusCode: 403, type: typeof(string), description: "Forbidden. Departure port can&#39;t be the same as the arrival port")]
         [SwaggerResponse(statusCode: 404, type: typeof(string), description: "Voyage not found.")]
         [SwaggerResponse(statusCode: 500, type: typeof(string), description: "Internal server error")]
-        public virtual IActionResult UpdateVoyageDPort([FromRoute (Name = "id")][Required]int id, [FromBody]string body)
+        public async Task<IActionResult> UpdateVoyageDPort([FromRoute (Name = "id")][Required]int id, [FromBody]string body)
         {
 
-            //TODO: Uncomment the next line to return response 204 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(204);
-            //TODO: Uncomment the next line to return response 400 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(400, default);
-            //TODO: Uncomment the next line to return response 403 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(403, default);
-            //TODO: Uncomment the next line to return response 404 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(404, default);
-            //TODO: Uncomment the next line to return response 500 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(500, default);
+           try
+            {
+            var voyage = await _context.Voyages.FirstOrDefaultAsync(s => s.Id == id);
 
-            throw new NotImplementedException();
+            if (voyage == null)
+            {
+                return NotFound($"Voyage not found.");
+            }
+
+            bool portExists = await _context.Ports.AnyAsync(c => c.Name == body);
+            if (!portExists)
+                return BadRequest($"Port '{body}' does not exist.");
+
+            voyage.DeparturePort = body;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+            }
+            catch (Exception)
+            {
+            return StatusCode(500, "A database error occurred.");
+            }
         }
-
         /// <summary>
         /// 
         /// </summary>
@@ -416,19 +434,26 @@ namespace NAPAProject.Controllers
         [SwaggerResponse(statusCode: 400, type: typeof(string), description: "Invalid input or parameters.")]
         [SwaggerResponse(statusCode: 404, type: typeof(string), description: "Voyage not found.")]
         [SwaggerResponse(statusCode: 500, type: typeof(string), description: "Internal server error")]
-        public virtual IActionResult UpdateVoyageDate([FromRoute (Name = "id")][Required]int id, [FromBody]DateOnly body)
+        public async Task<IActionResult> UpdateVoyageDate([FromRoute (Name = "id")][Required]int id, [FromBody]DateOnly body)
         {
+           try
+            {
+            var voyage = await _context.Voyages.FirstOrDefaultAsync(s => s.Id == id);
 
-            //TODO: Uncomment the next line to return response 204 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(204);
-            //TODO: Uncomment the next line to return response 400 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(400, default);
-            //TODO: Uncomment the next line to return response 404 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(404, default);
-            //TODO: Uncomment the next line to return response 500 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(500, default);
+            if (voyage == null)
+            {
+                return NotFound($"Voyage not found.");
+            }
 
-            throw new NotImplementedException();
+            voyage.Date = body;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+            }
+            catch (Exception)
+            {
+            return StatusCode(500, "A database error occurred.");
+            }
         }
 
         /// <summary>
@@ -451,21 +476,29 @@ namespace NAPAProject.Controllers
         [SwaggerResponse(statusCode: 403, type: typeof(string), description: "Forbidden. End time can&#39;t be later than start time.")]
         [SwaggerResponse(statusCode: 404, type: typeof(string), description: "Voyage not found.")]
         [SwaggerResponse(statusCode: 500, type: typeof(string), description: "Internal server error")]
-        public virtual IActionResult UpdateVoyageEnd([FromRoute (Name = "id")][Required]int id, [FromBody]DateTime body)
+        public async Task<IActionResult> UpdateVoyageEnd([FromRoute (Name = "id")][Required]int id, [FromBody]DateTime body)
         {
+            try
+            {
+            var voyage = await _context.Voyages.FirstOrDefaultAsync(s => s.Id == id);
 
-            //TODO: Uncomment the next line to return response 204 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(204);
-            //TODO: Uncomment the next line to return response 400 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(400, default);
-            //TODO: Uncomment the next line to return response 403 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(403, default);
-            //TODO: Uncomment the next line to return response 404 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(404, default);
-            //TODO: Uncomment the next line to return response 500 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(500, default);
+            if (voyage == null)
+            {
+                return NotFound($"Voyage not found.");
+            }
 
-            throw new NotImplementedException();
+            if(voyage.StartTime<body)
+                return Forbid("End time can be no sooner than start time");
+
+            voyage.EndTime = body;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+            }
+            catch (Exception)
+            {
+            return StatusCode(500, "A database error occurred.");
+            }
         }
 
         /// <summary>
@@ -488,21 +521,29 @@ namespace NAPAProject.Controllers
         [SwaggerResponse(statusCode: 403, type: typeof(string), description: "Forbidden. Start time can&#39;t be sooner than end time.")]
         [SwaggerResponse(statusCode: 404, type: typeof(string), description: "Voyage not found.")]
         [SwaggerResponse(statusCode: 500, type: typeof(string), description: "Internal server error")]
-        public virtual IActionResult UpdateVoyageStart([FromRoute (Name = "id")][Required]int id, [FromBody]DateTime body)
+        public async Task<IActionResult> UpdateVoyageStart([FromRoute (Name = "id")][Required]int id, [FromBody]DateTime body)
         {
+            try
+            {
+            var voyage = await _context.Voyages.FirstOrDefaultAsync(s => s.Id == id);
 
-            //TODO: Uncomment the next line to return response 204 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(204);
-            //TODO: Uncomment the next line to return response 400 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(400, default);
-            //TODO: Uncomment the next line to return response 403 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(403, default);
-            //TODO: Uncomment the next line to return response 404 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(404, default);
-            //TODO: Uncomment the next line to return response 500 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(500, default);
+            if (voyage == null)
+            {
+                return NotFound($"Voyage not found.");
+            }
 
-            throw new NotImplementedException();
+            if(voyage.EndTime<body)
+                return Forbid("Start time can be no sooner than end time");
+
+            voyage.StartTime = body;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+            }
+            catch (Exception)
+            {
+            return StatusCode(500, "A database error occurred.");
+            }
         }
     }
 }

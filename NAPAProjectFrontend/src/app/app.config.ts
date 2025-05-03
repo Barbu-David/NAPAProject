@@ -10,13 +10,15 @@ import { shipReducer } from './state/ships/ships.reducer';
 import { ShipEffects } from './state/ships/ships.effects';
 import { countryReducer } from './state/countries/countries.reducer';
 import { CountryEffects } from './state/countries/countries.effects';
+import { portReducer } from './state/ports/ports.reducer';
+import { PortEffects } from './state/ports/ports.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideHttpClient(), // ✅ needed for HttpClient to work
-    provideStore({ ships: shipReducer , countries: countryReducer}),
-    provideEffects([ShipEffects, CountryEffects]), // ✅ THE correct way to register effects
+    provideStore({ ships: shipReducer , countries: countryReducer, ports: portReducer}),
+    provideEffects([ShipEffects, CountryEffects, PortEffects]), // ✅ THE correct way to register effects
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() })
   ]
 };

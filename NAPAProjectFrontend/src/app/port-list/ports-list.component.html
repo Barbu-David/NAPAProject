@@ -1,0 +1,57 @@
+<div class="ports-overview">
+    <div class="ports-list">
+      <h2>Ports</h2>
+  
+      <form [formGroup]="form" (ngSubmit)="add()">
+        <input class="small-input" formControlName="name" placeholder="Name" required />
+        <input class="small-input" formControlName="country" placeholder="Country" required />
+        <button type="submit" [disabled]="form.invalid">Add Port</button>
+      </form>
+  
+      <div class="error" *ngIf="(error$ | async) as err">{{ err }}</div>
+  
+      <ng-container *ngIf="ports$ | async as ports">
+        <table *ngIf="ports.length; else noPorts">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Country</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let port of ports; trackBy: trackByName">
+              <td>{{ port.name }}</td>
+              <td>{{ port.country }}</td>
+              <td class="actions">
+                <button (click)="delete(port.name)">Delete</button>
+  
+                <input
+                  class="small-input"
+                  type="text"
+                  placeholder="New name"
+                  [(ngModel)]="renameInputs[port.name]"
+                  name="rename-{{ port.name }}"
+                />
+                <button (click)="rename(port.name)">Rename</button>
+  
+                <input
+                  class="small-input"
+                  type="text"
+                  placeholder="New country"
+                  [(ngModel)]="countryInputs[port.name]"
+                  name="country-{{ port.name }}"
+                />
+                <button (click)="updateCountry(port.name)">Update Country</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+  
+        <ng-template #noPorts>
+          <p>No ports found.</p>
+        </ng-template>
+      </ng-container>
+    </div>
+  </div>
+  

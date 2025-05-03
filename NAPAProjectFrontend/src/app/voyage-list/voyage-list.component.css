@@ -1,0 +1,68 @@
+.voyages-overview {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    padding: 1rem;
+    font-family: Arial, sans-serif;
+  }
+  
+  .voyages-list {
+    flex: 1;
+    max-width: none;
+  }
+  
+  form {
+    display: flex;
+    gap: 1rem;     
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+  
+
+  input[type="text"],
+  input[type="number"],
+  input[type="date"],
+  input[type="datetime-local"] {
+    width: 200px;      
+    padding: 0.4rem;   
+    font-size: 0.9rem;
+  }
+  
+  button {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+  
+  th,
+  td {
+    border: 1px solid #ccc;
+    padding: 0.6rem;  
+    text-align: left;
+    vertical-align: middle;
+  }
+  
+  th {
+    background-color: #444;
+    color: white;
+  }
+  
+  
+  td.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  input.small-input {
+    width: 150px;      
+    padding: 0.3rem;
+    font-size: 0.85rem;
+  }
+  

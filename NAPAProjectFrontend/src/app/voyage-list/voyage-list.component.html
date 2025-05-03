@@ -1,0 +1,63 @@
+<div class="voyages-overview">
+    <div class="voyages-list">
+      <h2>Voyages</h2>
+  
+      <form [formGroup]="form" (ngSubmit)="add()">
+        <input formControlName="departurePort" placeholder="Departure Port" required />
+        <input formControlName="arrivalPort"   placeholder="Arrival Port"   required />
+        <input type="date"       formControlName="date"          placeholder="Date" />
+        <input type="datetime-local" formControlName="startTime" required />
+        <input type="datetime-local" formControlName="endTime"   required />
+        <button type="submit" [disabled]="form.invalid">Add Voyage</button>
+      </form>
+  
+      <div class="error" *ngIf="error$ | async as err">{{ err }}</div>
+  
+      <ng-container *ngIf="voyages$ | async as voyages; else noVoyages">
+        <table *ngIf="voyages.length; else noVoyages">
+          <thead>
+            <tr>
+              <th>ID</th><th>Departure</th><th>Arrival</th>
+              <th>Date</th><th>Start</th><th>End</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let v of voyages; trackBy: trackById">
+              <td>{{ v.id }}</td>
+              <td>{{ v.departurePort }}</td>
+              <td>{{ v.arrivalPort }}</td>
+              <td>{{ v.date }}</td>
+              <td>{{ v.startTime }}</td>
+              <td>{{ v.endTime }}</td>
+              <td class="actions">
+                <button (click)="delete(v.id!)">Delete</button>
+  
+                <input type="date"
+                       placeholder="New Date"
+                       [(ngModel)]="dateInputs[v.id!]"
+                       name="updateDate-{{v.id}}"/>
+                <button (click)="updateDate(v.id!)">Update Date</button>
+  
+                <input type="datetime-local"
+                       placeholder="New Start"
+                       [(ngModel)]="startInputs[v.id!]"
+                       name="updateStart-{{v.id}}"/>
+                <button (click)="updateStart(v.id!)">Update Start</button>
+  
+                <input type="datetime-local"
+                       placeholder="New End"
+                       [(ngModel)]="endInputs[v.id!]"
+                       name="updateEnd-{{v.id}}"/>
+                <button (click)="updateEnd(v.id!)">Update End</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </ng-container>
+  
+      <ng-template #noVoyages>
+        <p>No voyages found.</p>
+      </ng-template>
+    </div>
+  </div>
+  

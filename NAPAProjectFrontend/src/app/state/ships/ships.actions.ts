@@ -17,4 +17,14 @@ export const deleteShip        = createAction('[Ships] Delete Ship', props<{ nam
 export const deleteShipSuccess = createAction('[Ships] Delete Ship Success', props<{ name: string }>());
 export const deleteShipFailure = createAction('[Ships] Delete Ship Failure', props<{ error: ErrorMessage }>());
 
+// update name
+export const updateNameShip = createAction('[Ships] Rename Ship',props<{ name: string; newName: string }>());
+export const updateNameShipSuccess = createAction('[Ships] Rename Ship Success', props<{ name: string; newName: string }>());
+export const updateNameShipFailure = createAction('[Ships] Rename Ship Failure',props<{ error: ErrorMessage }>());
+
+// update speed
+export const updateSpeedShip = createAction('[Ships] UpdateSpeed Ship',props<{ name: string; newSpeed: number }>());
+export const updateSpeedShipSuccess = createAction('[Ships] UpdateSpeed Ship Success', props<{ name: string; newSpeed: number }>());
+export const updateSpeedShipFailure = createAction('[Ships] UppdateSpeed Ship Failure',props<{ error: ErrorMessage }>());
+
 export{}

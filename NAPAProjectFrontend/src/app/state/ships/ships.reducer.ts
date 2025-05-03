@@ -23,16 +23,25 @@ export const shipReducer = createReducer(
   on(ShipActions.loadShipsFailure, (state, { error }) => ({ ...state, loading: false, error })),
 
   // add
-  on(ShipActions.addShipSuccess, (state, { ship }) => ({
-    ...state,
-    ships: [...state.ships, ship]
-  })),
+  on(ShipActions.addShipSuccess, (state, { ship }) => ({...state, ships: [...state.ships, ship]})),
 
   // delete
-  on(ShipActions.deleteShipSuccess, (state, { name }) => ({
+  on(ShipActions.deleteShipSuccess, (state, { name }) => ({...state, ships: state.ships.filter(s => s.name !== name)})),
+
+  // updateName
+  on(ShipActions.updateNameShipSuccess, (state, { name, newName }) => ({
     ...state,
-    ships: state.ships.filter(s => s.name !== name)
+    ships: state.ships.map(s =>
+      s.name === name
+        ? { ...s, name: newName }
+        : s
+    )
+  })),
+  on(ShipActions.updateNameShipFailure, (state, { error }) => ({
+    ...state,
+    error
   }))
+  
 );
 
 export {};

@@ -1,27 +1,66 @@
-<div class="ships-container">
+<div class="ships-overview">
+  <div class="ships-list">
     <h2>Ships</h2>
-  
+
     <form [formGroup]="form" (ngSubmit)="add()">
-      <input formControlName="name" placeholder="Name" required>
-      <input type="number" formControlName="speed" placeholder="Speed" required>
+      <input class="small-input" formControlName="name" placeholder="Name" required>
+      <input class="small-input" type="number" formControlName="speed" placeholder="Speed" required>
       <button type="submit" [disabled]="form.invalid">Add Ship</button>
     </form>
-  
-    <div *ngIf="loading$ | async">Loading…</div>
+
     <div class="error" *ngIf="(error$ | async) as err">{{ err }}</div>
-  
+
     <table *ngIf="(ships$ | async)?.length">
       <thead>
-        <tr><th>Name</th><th>Speed</th><th>Actions</th></tr>
+        <tr>
+          <th>Name</th>
+          <th>Speed</th>
+          <th>Actions</th>
+        </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let ship of ships$ | async">
+        <tr *ngFor="let ship of ships$ | async; trackBy: trackByName">
           <td>{{ ship.name }}</td>
           <td>{{ ship.speed }}</td>
-          <td><button (click)="delete(ship.name)">Delete</button></td>
-          <td><button (click)="delete(ship.name)">Rename</button></td>
+          <td class="actions">
+            <button (click)="delete(ship.name)">Delete</button>
+
+            <input
+              class="small-input"
+              type="text"
+              placeholder="New name"
+              [(ngModel)]="renameInputs[ship.name]"
+              name="rename-{{ ship.name }}"
+            />
+            <button (click)="rename(ship.name)">Rename</button>
+
+            <input
+              class="small-input"
+              type="number"
+              placeholder="New speed"
+              [(ngModel)]="speedInputs[ship.name]"
+              name="speed-{{ ship.name }}"
+            />
+            <button (click)="updateSpeed(ship.name)">Update Speed</button>
+          </td>
         </tr>
       </tbody>
     </table>
   </div>
-  
+
+  <div class="ships-chart">
+    <h3>Ship Speed Chart</h3>
+
+    <ng-container *ngIf="sortedShips$ | async as ships">
+      <ng-container *ngIf="maxSpeed$ | async as max">
+        <div *ngFor="let s of ships" class="bar-row">
+          <span class="label">{{ s.name }}</span>
+          <div class="bar-container">
+            <div class="bar" [style.width.%]="(s.speed / max) * 100"></div>
+            <span class="value">{{ s.speed }}</span>
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
+  </div>
+</div>

@@ -58,4 +58,29 @@ export class ShipEffects {
       )
     )
   );
+
+    updateNameShip$ = createEffect(() =>
+      this.actions$.pipe(
+        ofType(ShipActions.updateNameShip),
+        mergeMap(({ name, newName }) =>
+          this.shipService.updateNameShip(name, newName).pipe(
+            map(() => ShipActions.updateNameShipSuccess({ name, newName })),
+            catchError(err => of(ShipActions.updateNameShipFailure({ error: err.message })))
+          )
+        )
+      )
+    );
+
+    updateSpeedShip$ = createEffect(() =>
+      this.actions$.pipe(
+        ofType(ShipActions.updateSpeedShip),
+        mergeMap(({ name, newSpeed }) =>
+          this.shipService.updateSpeedShip(name, newSpeed).pipe(
+            map(() => ShipActions.updateSpeedShipSuccess({ name, newSpeed })),
+            catchError(err => of(ShipActions.updateSpeedShipFailure({ error: err.message })))
+          )
+        )
+      )
+    );
+
 }

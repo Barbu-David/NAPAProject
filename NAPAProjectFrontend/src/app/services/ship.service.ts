@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Ship } from '../models/ship.model';
 import { Observable } from 'rxjs';
 
@@ -24,6 +24,25 @@ export class ShipService {
   deleteShip(name: string): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${encodeURIComponent(name)}`);
   }
+
+  updateNameShip(name: string, newName: string): Observable<void> {
+  const url = `${this.baseUrl}/${encodeURIComponent(name)}`;
+  return this.http.put<void>(
+    url,
+    JSON.stringify(newName),                     
+    { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }
+  );
+}
+
+  updateSpeedShip(name: string, newSpeed: number): Observable<void> {
+    const url = `${this.baseUrl}/${encodeURIComponent(name)}/topSpeed`;
+    return this.http.put<void>(
+      url,
+      newSpeed,                                                  
+      { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }
+    );
+  }    
+
 }
 
 export {};

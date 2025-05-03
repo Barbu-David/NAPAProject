@@ -12,6 +12,7 @@
         <UserSecretsId>9611f0b9-7bc3-4e47-bd51-d5db0f3df679</UserSecretsId>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <DockerfileContext>..\..</DockerfileContext>
+        <NoWarn>$(NoWarn);1591</NoWarn><!--disable missing comment warning-->
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.4" />

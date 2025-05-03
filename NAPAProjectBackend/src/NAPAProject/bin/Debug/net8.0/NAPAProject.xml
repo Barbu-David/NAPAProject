@@ -20,10 +20,12 @@
             
             </summary>
         </member>
-        <member name="M:NAPAProject.Controllers.CountriesApiController.AddCountry(NAPAProject.Models.AddCountryRequest)">
+        <member name="F:NAPAProject.Controllers.CountriesApiController._context">
             <summary>
             
             </summary>
+        </member>
+        <member name="M:NAPAProject.Controllers.CountriesApiController.AddCountry(NAPAProject.Models.AddCountryRequest)">
             <remarks>Adds a new country to the data base</remarks>
             <param name="addCountryRequest">Country details</param>
             <response code="201">Country created successfully</response>
@@ -48,7 +50,7 @@
             <response code="200">The list of all country names.</response>
             <response code="500">Internal server error</response>
         </member>
-        <member name="M:NAPAProject.Controllers.CountriesApiController.GetCountryName(System.String,System.String)">
+        <member name="M:NAPAProject.Controllers.CountriesApiController.UpdateCountryName(System.String,System.String)">
             <summary>
             
             </summary>

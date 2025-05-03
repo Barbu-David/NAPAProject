@@ -19,6 +19,10 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using Newtonsoft.Json;
 using NAPAProject.Attributes;
 using NAPAProject.Models;
+using NAPAProject.Data;
+using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
+using System.Linq;
 
 namespace NAPAProject.Controllers
 { 
@@ -27,7 +31,16 @@ namespace NAPAProject.Controllers
     /// </summary>
     [ApiController]
     public class PortsApiController : ControllerBase
-    { 
+    {         
+        
+        private readonly AppDbContext _context;
+
+        public PortsApiController(AppDbContext context)
+        {
+            _context = context;
+        }
+
+
         /// <summary>
         /// 
         /// </summary>
@@ -36,6 +49,7 @@ namespace NAPAProject.Controllers
         /// <response code="201">Port created successfully</response>
         /// <response code="400">Invalid input or parameters.</response>
         /// <response code="500">Internal server error</response>
+
         [HttpPut]
         [Route("/ports")]
         [Consumes("application/json")]
@@ -44,25 +58,32 @@ namespace NAPAProject.Controllers
         [SwaggerResponse(statusCode: 201, type: typeof(string), description: "Port created successfully")]
         [SwaggerResponse(statusCode: 400, type: typeof(string), description: "Invalid input or parameters.")]
         [SwaggerResponse(statusCode: 500, type: typeof(string), description: "Internal server error")]
-        public virtual IActionResult AddPort([FromBody]AddPortRequest addPortRequest)
+        public async Task<IActionResult> AddPort([FromBody]AddPortRequest addPortRequest)
         {
-
-            //TODO: Uncomment the next line to return response 201 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(201, default);
-            //TODO: Uncomment the next line to return response 400 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(400, default);
-            //TODO: Uncomment the next line to return response 500 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(500, default);
-            string exampleJson = null;
-            exampleJson = "\"Brindisi\"";
-            exampleJson = "\"Error\"";
-            exampleJson = "\"Error\"";
+            if (!ModelState.IsValid)
+                return BadRequest("Invalid port data.");
             
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<string>(exampleJson)
-            : default;
-            //TODO: Change the data returned
-            return new ObjectResult(example);
+            var port = new Port
+            {
+                CountryName  = addPortRequest.Country,
+                Name=addPortRequest.Name
+            };
+
+            try
+            {
+                _context.Ports.Add(port);
+                await _context.SaveChangesAsync();
+                return Created($"/ports/{Uri.EscapeDataString(port.Name)}", port.Name);
+            }
+            catch (DbUpdateException dbEx)
+            {
+                        if (dbEx.InnerException?.Message.Contains("UNIQUE constraint failed") == true)
+                         {
+                              return BadRequest($"A port with the name '{port.Name}' already exists.");
+                        }
+
+                return StatusCode(500, "An error occurred while saving the port.");
+            }
         }
 
         /// <summary>

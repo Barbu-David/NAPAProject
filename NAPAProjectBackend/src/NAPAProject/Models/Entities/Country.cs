@@ -4,6 +4,7 @@ namespace NAPAProject.Models
 {
     public class Country
     {
+
         [Key]
         public string Name { get; set; }
 

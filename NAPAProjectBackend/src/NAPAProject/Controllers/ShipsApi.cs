@@ -117,7 +117,7 @@ namespace NAPAProject.Controllers
 
                 return NoContent(); // 204
             }
-            catch (DbUpdateException dbEx)
+            catch (DbUpdateException)
             {
                 return StatusCode(500, "A database error occurred while deleting the ship.");
             }
@@ -151,7 +151,7 @@ namespace NAPAProject.Controllers
 
            return Ok(ship.Speed);
             }
-            catch (Exception dbEx)
+            catch (Exception)
             {
                 return StatusCode(500, "A database error occurred.");
             }

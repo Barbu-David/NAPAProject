@@ -19,18 +19,32 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using Newtonsoft.Json;
 using NAPAProject.Attributes;
 using NAPAProject.Models;
+using NAPAProject.Data;
+using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
+using System.Linq;
+
 
 namespace NAPAProject.Controllers
 { 
     /// <summary>
     /// 
     /// </summary>
+
     [ApiController]
     public class CountriesApiController : ControllerBase
     { 
         /// <summary>
         /// 
         /// </summary>
+    
+        private readonly AppDbContext _context;
+
+        public CountriesApiController(AppDbContext context)
+        {
+            _context = context;
+        }
+
         /// <remarks>Adds a new country to the data base</remarks>
         /// <param name="addCountryRequest">Country details</param>
         /// <response code="201">Country created successfully</response>
@@ -44,25 +58,34 @@ namespace NAPAProject.Controllers
         [SwaggerResponse(statusCode: 201, type: typeof(string), description: "Country created successfully")]
         [SwaggerResponse(statusCode: 400, type: typeof(string), description: "Invalid input or parameters.")]
         [SwaggerResponse(statusCode: 500, type: typeof(string), description: "Internal server error")]
-        public virtual IActionResult AddCountry([FromBody]AddCountryRequest addCountryRequest)
+        public async Task<IActionResult> AddCountry([FromBody]AddCountryRequest addCountryRequest)
         {
 
-            //TODO: Uncomment the next line to return response 201 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(201, default);
-            //TODO: Uncomment the next line to return response 400 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(400, default);
-            //TODO: Uncomment the next line to return response 500 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(500, default);
-            string exampleJson = null;
-            exampleJson = "\"Titanic\"";
-            exampleJson = "\"Error\"";
-            exampleJson = "\"Error\"";
+            if (!ModelState.IsValid)
+                return BadRequest("Invalid country data.");
             
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<string>(exampleJson)
-            : default;
-            //TODO: Change the data returned
-            return new ObjectResult(example);
+            var country = new Country
+            {
+                Name  = addCountryRequest.Name,
+                Visited = addCountryRequest.Visited
+            };
+
+            try
+            {
+                _context.Countries.Add(country);
+                await _context.SaveChangesAsync();
+                return Created($"/countries/{Uri.EscapeDataString(country.Name)}", country.Name);
+            }
+            catch (DbUpdateException dbEx)
+            {
+                        if (dbEx.InnerException?.Message.Contains("UNIQUE constraint failed") == true)
+                         {
+                              return BadRequest($"A country with the name '{country.Name}' already exists.");
+                        }
+
+                return StatusCode(500, "An error occurred while saving the country.");
+            }
+
         }
 
         /// <summary>
@@ -79,17 +102,26 @@ namespace NAPAProject.Controllers
         [SwaggerOperation("DeleteCountry")]
         [SwaggerResponse(statusCode: 404, type: typeof(string), description: "Country not found.")]
         [SwaggerResponse(statusCode: 500, type: typeof(string), description: "Internal server error")]
-        public virtual IActionResult DeleteCountry([FromRoute (Name = "name")][Required][RegularExpression("^.*?$")]string name)
+        public async Task<IActionResult>  DeleteCountry([FromRoute (Name = "name")][Required][RegularExpression("^.*?$")]string name)
         {
+            try
+            {
+                var country = await _context.Countries.FindAsync(name);
 
-            //TODO: Uncomment the next line to return response 204 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(204);
-            //TODO: Uncomment the next line to return response 404 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(404, default);
-            //TODO: Uncomment the next line to return response 500 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(500, default);
+                if (country == null)
+                {
+                     return NotFound($"Country with name '{name}' not found.");
+                }
 
-            throw new NotImplementedException();
+                _context.Countries.Remove(country);
+                await _context.SaveChangesAsync();
+
+                return NoContent(); // 204
+            }
+            catch (DbUpdateException)
+            {
+                return StatusCode(500, "A database error occurred while deleting the country.");
+            }
         }
 
         /// <summary>
@@ -104,22 +136,19 @@ namespace NAPAProject.Controllers
         [SwaggerOperation("GetCountries")]
         [SwaggerResponse(statusCode: 200, type: typeof(List<string>), description: "The list of all country names.")]
         [SwaggerResponse(statusCode: 500, type: typeof(string), description: "Internal server error")]
-        public virtual IActionResult GetCountries()
+        public async Task<IActionResult> GetCountries()
         {
+                try
+                {
+                    var allCountries = await _context.Countries.ToListAsync(); 
+                    var countryNames = allCountries.Select(s => s.Name).ToList(); 
 
-            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(200, default);
-            //TODO: Uncomment the next line to return response 500 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(500, default);
-            string exampleJson = null;
-            exampleJson = "[ \"France\", \"France\" ]";
-            exampleJson = "\"Error\"";
-            
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<List<string>>(exampleJson)
-            : default;
-            //TODO: Change the data returned
-            return new ObjectResult(example);
+                    return Ok(countryNames);
+                }
+                catch (Exception)
+                {
+                    return StatusCode(500, "A database error occurred.");
+                }
         }
 
         /// <summary>
@@ -140,21 +169,46 @@ namespace NAPAProject.Controllers
         [SwaggerResponse(statusCode: 400, type: typeof(string), description: "Invalid input or parameters.")]
         [SwaggerResponse(statusCode: 404, type: typeof(string), description: "Country not found.")]
         [SwaggerResponse(statusCode: 500, type: typeof(string), description: "Internal server error")]
-        public virtual IActionResult GetCountryName([FromRoute (Name = "name")][Required][RegularExpression("^.*?$")]string name, [FromBody]string body)
+        public async Task<IActionResult> UpdateCountryName([FromRoute (Name = "name")][Required][RegularExpression("^.*?$")]string name, [FromBody]string body)
         {
+            if (string.IsNullOrWhiteSpace(body))
+            {
+            return BadRequest("New name must be a non-empty string.");
+            }
 
-            //TODO: Uncomment the next line to return response 204 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(204);
-            //TODO: Uncomment the next line to return response 400 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(400, default);
-            //TODO: Uncomment the next line to return response 404 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(404, default);
-            //TODO: Uncomment the next line to return response 500 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(500, default);
+            try
+            {
+                var existingCountry = await _context.Countries.FindAsync(name);
+                if (existingCountry == null)
+                {
+                    return NotFound($"Ship with name '{name}' not found.");
+                }
 
-            throw new NotImplementedException();
+                // Check if a country already exists with the new name
+                var nameConflict = await _context.Countries.AnyAsync(s => s.Name == body);
+                if (nameConflict)
+                {
+                    return BadRequest($"A country with name '{body}' already exists.");
+                }
+
+                var renamedCountry = new Country
+                {
+                Name = body,
+                Visited = existingCountry.Visited
+                };
+
+                _context.Countries.Add(renamedCountry);
+                _context.Countries.Remove(existingCountry);
+                await _context.SaveChangesAsync();
+
+                return NoContent();
         }
-
+        catch (Exception)
+        {   
+            return StatusCode(500, "A database error occurred.");
+        }
+        
+        }
         /// <summary>
         /// 
         /// </summary>
@@ -170,24 +224,23 @@ namespace NAPAProject.Controllers
         [SwaggerResponse(statusCode: 200, type: typeof(bool), description: "If a country has been visited")]
         [SwaggerResponse(statusCode: 404, type: typeof(string), description: "Country not found.")]
         [SwaggerResponse(statusCode: 500, type: typeof(string), description: "Internal server error")]
-        public virtual IActionResult GetCountryVisited([FromRoute (Name = "name")][Required][RegularExpression("^.*?$")]string name)
+        public async Task<IActionResult> GetCountryVisited([FromRoute (Name = "name")][Required][RegularExpression("^.*?$")]string name)
         {
+            try
+            {
+            var country = await _context.Countries.FirstOrDefaultAsync(s => s.Name == name);
 
-            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(200, default);
-            //TODO: Uncomment the next line to return response 404 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(404, default);
-            //TODO: Uncomment the next line to return response 500 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(500, default);
-            string exampleJson = null;
-            exampleJson = "\"Error\"";
-            exampleJson = "\"Error\"";
-            
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<bool>(exampleJson)
-            : default;
-            //TODO: Change the data returned
-            return new ObjectResult(example);
+            if (country == null)
+            {
+               return NotFound($"Country with name {name} not found.");
+            }
+
+           return Ok(country.Visited);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "A database error occurred.");
+            }
         }
     }
 }

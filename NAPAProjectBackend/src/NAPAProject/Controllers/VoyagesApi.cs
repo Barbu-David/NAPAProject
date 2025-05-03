@@ -19,6 +19,10 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using Newtonsoft.Json;
 using NAPAProject.Attributes;
 using NAPAProject.Models;
+using NAPAProject.Data;
+using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
+using System.Linq;
 
 namespace NAPAProject.Controllers
 { 
@@ -28,6 +32,14 @@ namespace NAPAProject.Controllers
     [ApiController]
     public class VoyagesApiController : ControllerBase
     { 
+
+        private readonly AppDbContext _context;
+
+        public VoyagesApiController(AppDbContext context)
+        {
+            _context = context;
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -44,25 +56,42 @@ namespace NAPAProject.Controllers
         [SwaggerResponse(statusCode: 201, type: typeof(int), description: "Voyage created successfully")]
         [SwaggerResponse(statusCode: 400, type: typeof(string), description: "Invalid input or parameters.")]
         [SwaggerResponse(statusCode: 500, type: typeof(string), description: "Internal server error")]
-        public virtual IActionResult AddVoyage([FromBody]AddVoyageRequest addVoyageRequest)
+        public async Task<IActionResult> AddVoyage([FromBody]AddVoyageRequest addVoyageRequest)
         {
+            if (!ModelState.IsValid)
+                return BadRequest("Invalid port data.");
 
-            //TODO: Uncomment the next line to return response 201 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(201, default);
-            //TODO: Uncomment the next line to return response 400 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(400, default);
-            //TODO: Uncomment the next line to return response 500 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(500, default);
-            string exampleJson = null;
-            exampleJson = "12";
-            exampleJson = "\"Error\"";
-            exampleJson = "\"Error\"";
-            
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<int>(exampleJson)
-            : default;
-            //TODO: Change the data returned
-            return new ObjectResult(example);
+            bool portArrivalExists = await _context.Ports.AnyAsync(c => c.Name == addVoyageRequest.ArrivalPort);
+            if (!portArrivalExists)
+                return BadRequest($"Country '{addVoyageRequest.ArrivalPort}' does not exist.");
+           
+            bool portDepartureExists = await _context.Ports.AnyAsync(c => c.Name == addVoyageRequest.DeparturePort);
+            if (!portArrivalExists)
+                return BadRequest($"Country '{addVoyageRequest.ArrivalPort}' does not exist.");
+
+            var voyage = new Voyage
+            {
+               Date=addVoyageRequest.Date,
+               DeparturePort=addVoyageRequest.DeparturePort,
+               ArrivalPort=addVoyageRequest.ArrivalPort,
+               StartTime=addVoyageRequest.StartTime,
+               EndTime=addVoyageRequest.EndTime
+            };
+
+            try
+            {
+                _context.Voyages.Add(voyage);
+                await _context.SaveChangesAsync();
+                var uri = $"/voyages/{voyage.Id}";
+                return Created(uri, voyage.Id);
+            }
+            catch (DbUpdateException dbEx)
+            {
+    
+                        if (dbEx.InnerException?.Message.Contains("FOREIGN KEY constraint failed") == true)
+                            return BadRequest($"Invalid port(s).");
+                return StatusCode(500, "An error occurred while saving the port.");
+            }
         }
 
         /// <summary>
@@ -79,17 +108,26 @@ namespace NAPAProject.Controllers
         [SwaggerOperation("DeleteVoyage")]
         [SwaggerResponse(statusCode: 404, type: typeof(string), description: "Voyage not found.")]
         [SwaggerResponse(statusCode: 500, type: typeof(string), description: "Internal server error")]
-        public virtual IActionResult DeleteVoyage([FromRoute (Name = "id")][Required]int id)
+        public async Task<IActionResult> DeleteVoyage([FromRoute (Name = "id")][Required]int id)
         {
+            try
+            {
+                var voyage = await _context.Voyages.FindAsync(id);
 
-            //TODO: Uncomment the next line to return response 204 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(204);
-            //TODO: Uncomment the next line to return response 404 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(404, default);
-            //TODO: Uncomment the next line to return response 500 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(500, default);
+                if (voyage == null)
+                {
+                     return NotFound($"Voyage not found.");
+                }
 
-            throw new NotImplementedException();
+                _context.Voyages.Remove(voyage);
+                await _context.SaveChangesAsync();
+
+                return NoContent(); // 204
+            }
+            catch (DbUpdateException)
+            {
+                return StatusCode(500, "A database error occurred while deleting the ship.");
+            }
         }
 
         /// <summary>
@@ -107,25 +145,9 @@ namespace NAPAProject.Controllers
         [SwaggerResponse(statusCode: 200, type: typeof(string), description: "Voyage arrival port")]
         [SwaggerResponse(statusCode: 404, type: typeof(string), description: "Voyage not found.")]
         [SwaggerResponse(statusCode: 500, type: typeof(string), description: "Internal server error")]
-        public virtual IActionResult GetVoyageAPort([FromRoute (Name = "id")][Required]int id)
+        public async Task<IActionResult> GetVoyageAPort([FromRoute (Name = "id")][Required]int id)
         {
-
-            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(200, default);
-            //TODO: Uncomment the next line to return response 404 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(404, default);
-            //TODO: Uncomment the next line to return response 500 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(500, default);
-            string exampleJson = null;
-            exampleJson = "\"Brindisi\"";
-            exampleJson = "\"Error\"";
-            exampleJson = "\"Error\"";
             
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<string>(exampleJson)
-            : default;
-            //TODO: Change the data returned
-            return new ObjectResult(example);
         }
 
         /// <summary>

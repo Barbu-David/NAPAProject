@@ -197,6 +197,11 @@ namespace NAPAProject.Controllers
                 Visited = existingCountry.Visited
                 };
 
+                await _context.Database
+                .ExecuteSqlRawAsync(
+                "UPDATE Ports SET CountryName = {0} WHERE CountryName = {1}",
+                renamedCountry.Name, existingCountry.Name);
+
                 _context.Countries.Add(renamedCountry);
                 _context.Countries.Remove(existingCountry);
                 await _context.SaveChangesAsync();

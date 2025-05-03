@@ -198,6 +198,43 @@ namespace NAPAProject.Controllers
             }
         }
 
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <remarks>Get a port&#39;s country </remarks>
+        /// <param name="name">The name for a port.</param>
+        /// <response code="200">The port country</response>
+        /// <response code="400">Invalid input or parameters.</response>
+        /// <response code="404">Port not found.</response>
+        /// <response code="500">Internal server error</response>
+        [HttpGet]
+        [Route("/ports/{name}/country")]
+        [Consumes("application/json")]
+        [ValidateModelState]
+        [SwaggerOperation("GetPortCountry")]
+        [SwaggerResponse(statusCode: 400, type: typeof(string), description: "Invalid input or parameters.")]
+        [SwaggerResponse(statusCode: 404, type: typeof(string), description: "Port not found.")]
+        [SwaggerResponse(statusCode: 500, type: typeof(string), description: "Internal server error")]
+        public async Task<IActionResult> GetPortCountry([FromRoute (Name = "name")][Required][RegularExpression("^.*?$")]string name)
+        {
+            try
+            {
+            var port = await _context.Ports.FirstOrDefaultAsync(s => s.Name == name);
+
+            if (port == null)
+            {
+            return NotFound($"Port with name {name} not found.");
+            }
+            return Ok(port.CountryName);
+            }
+            catch (Exception)
+            {
+            return StatusCode(500, "A database error occurred.");
+            }
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -242,6 +279,16 @@ namespace NAPAProject.Controllers
                 Name = body,
                 CountryName = existingPort.CountryName
                 };
+
+                await _context.Database
+                .ExecuteSqlRawAsync(
+                "UPDATE Voyages SET ArrivalPort = {0} WHERE ArrivalPort = {1}",
+                renamedPort.Name, existingPort.Name);
+
+                await _context.Database
+                .ExecuteSqlRawAsync(
+                "UPDATE Voyages SET DeparturePort = {0} WHERE DeparturePort = {1}",
+                renamedPort.Name, existingPort.Name);
 
                 _context.Ports.Add(renamedPort);
                 _context.Ports.Remove(existingPort);

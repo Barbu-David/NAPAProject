@@ -39,7 +39,7 @@ namespace NAPAProject.Models
         /// Indicates if a country has been visited.
         /// </summary>
         /// <value>Indicates if a country has been visited.</value>
-        [DataMember(Name="visited", EmitDefaultValue=true)]
+        [DataMember(Name="visited", EmitDefaultValue=false)]
         public bool Visited { get; set; }
 
         /// <summary>

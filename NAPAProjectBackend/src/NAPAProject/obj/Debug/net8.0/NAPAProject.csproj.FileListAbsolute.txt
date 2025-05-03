@@ -916,3 +916,4 @@
 /home/david/Code/NAPA/NAPAProjectBackend/src/NAPAProject/obj/Debug/net8.0/NAPAProject.pdb
 /home/david/Code/NAPA/NAPAProjectBackend/src/NAPAProject/obj/Debug/net8.0/NAPAProject.genruntimeconfig.cache
 /home/david/Code/NAPA/NAPAProjectBackend/src/NAPAProject/obj/Debug/net8.0/ref/NAPAProject.dll
+/home/david/Code/NAPA/NAPAProjectBackend/src/NAPAProject/obj/Debug/net8.0/NAPAProject.sourcelink.json

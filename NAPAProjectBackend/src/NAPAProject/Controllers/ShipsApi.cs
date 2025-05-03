@@ -50,7 +50,7 @@ namespace NAPAProject.Controllers
         /// <response code="201">Ship created successfully</response>
         /// <response code="400">Invalid input or parameters.</response>
         /// <response code="500">Internal server error</response>
-        [HttpPut]
+        [HttpPost]
         [Route("/ships")]
         [Consumes("application/json")]
         [ValidateModelState]

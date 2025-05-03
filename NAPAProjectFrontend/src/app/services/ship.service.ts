@@ -18,7 +18,7 @@ export class ShipService {
   }
 
   addShip(ship: Ship): Observable<string> {
-    return this.http.put<string>(this.baseUrl, ship);
+    return this.http.post<string>(this.baseUrl, ship);
   }
 
   deleteShip(name: string): Observable<void> {

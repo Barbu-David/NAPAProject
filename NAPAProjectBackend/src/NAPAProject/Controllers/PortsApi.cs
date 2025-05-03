@@ -50,7 +50,7 @@ namespace NAPAProject.Controllers
         /// <response code="400">Invalid input or parameters.</response>
         /// <response code="500">Internal server error</response>
 
-        [HttpPut]
+        [HttpPost]
         [Route("/ports")]
         [Consumes("application/json")]
         [ValidateModelState]
@@ -62,7 +62,11 @@ namespace NAPAProject.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest("Invalid port data.");
-            
+
+            bool countryExists = await _context.Countries.AnyAsync(c => c.Name == addPortRequest.Country);
+            if (!countryExists)
+                return BadRequest($"Country '{addPortRequest.Country}' does not exist.");
+
             var port = new Port
             {
                 CountryName  = addPortRequest.Country,
@@ -78,10 +82,11 @@ namespace NAPAProject.Controllers
             catch (DbUpdateException dbEx)
             {
                         if (dbEx.InnerException?.Message.Contains("UNIQUE constraint failed") == true)
-                         {
+                        {
                               return BadRequest($"A port with the name '{port.Name}' already exists.");
                         }
-
+                        if (dbEx.InnerException?.Message.Contains("FOREIGN KEY constraint failed") == true)
+                            return BadRequest($"Invalid country '{port.CountryName}'.");
                 return StatusCode(500, "An error occurred while saving the port.");
             }
         }
@@ -100,17 +105,26 @@ namespace NAPAProject.Controllers
         [SwaggerOperation("DeletePort")]
         [SwaggerResponse(statusCode: 404, type: typeof(string), description: "Port not found.")]
         [SwaggerResponse(statusCode: 500, type: typeof(string), description: "Internal server error")]
-        public virtual IActionResult DeletePort([FromRoute (Name = "name")][Required][RegularExpression("^.*?$")]string name)
+        public async Task<IActionResult> DeletePort([FromRoute (Name = "name")][Required][RegularExpression("^.*?$")]string name)
         {
+            try
+            {
+                var port = await _context.Ports.FindAsync(name);
 
-            //TODO: Uncomment the next line to return response 204 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(204);
-            //TODO: Uncomment the next line to return response 404 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(404, default);
-            //TODO: Uncomment the next line to return response 500 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(500, default);
+                if (port == null)
+                {
+                     return NotFound($"Port with name '{name}' not found.");
+                }
 
-            throw new NotImplementedException();
+                _context.Ports.Remove(port);
+                await _context.SaveChangesAsync();
+
+                return NoContent(); // 204
+            }
+            catch (DbUpdateException)
+            {
+                return StatusCode(500, "A database error occurred while deleting the ship.");
+            }
         }
 
         /// <summary>
@@ -125,22 +139,19 @@ namespace NAPAProject.Controllers
         [SwaggerOperation("GetPorts")]
         [SwaggerResponse(statusCode: 200, type: typeof(List<string>), description: "The list of all port names.")]
         [SwaggerResponse(statusCode: 500, type: typeof(string), description: "Internal server error")]
-        public virtual IActionResult GetPorts()
+        public async Task<IActionResult> GetPorts()
         {
+                try
+                {
+                    var allPorts = await _context.Ports.ToListAsync(); 
+                    var portNames = allPorts.Select(s => s.Name).ToList(); 
 
-            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(200, default);
-            //TODO: Uncomment the next line to return response 500 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(500, default);
-            string exampleJson = null;
-            exampleJson = "[ \"Brindisi\", \"Brindisi\" ]";
-            exampleJson = "\"Error\"";
-            
-            var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<List<string>>(exampleJson)
-            : default;
-            //TODO: Change the data returned
-            return new ObjectResult(example);
+                    return Ok(portNames);
+                }
+                catch (Exception)
+                {
+                    return StatusCode(500, "A database error occurred.");
+                }
         }
 
         /// <summary>
@@ -161,19 +172,30 @@ namespace NAPAProject.Controllers
         [SwaggerResponse(statusCode: 400, type: typeof(string), description: "Invalid input or parameters.")]
         [SwaggerResponse(statusCode: 404, type: typeof(string), description: "Port not found.")]
         [SwaggerResponse(statusCode: 500, type: typeof(string), description: "Internal server error")]
-        public virtual IActionResult UpdatePortCountry([FromRoute (Name = "name")][Required][RegularExpression("^.*?$")]string name, [FromBody]string body)
+        public async Task<IActionResult> UpdatePortCountry([FromRoute (Name = "name")][Required][RegularExpression("^.*?$")]string name, [FromBody]string body)
         {
+            try
+            {
+            var port = await _context.Ports.FirstOrDefaultAsync(s => s.Name == name);
 
-            //TODO: Uncomment the next line to return response 204 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(204);
-            //TODO: Uncomment the next line to return response 400 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(400, default);
-            //TODO: Uncomment the next line to return response 404 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(404, default);
-            //TODO: Uncomment the next line to return response 500 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(500, default);
+            if (port == null)
+            {
+            return NotFound($"Port with name {name} not found.");
+            }
+           
+            bool countryExists = await _context.Countries.AnyAsync(c => c.Name == body);
+            if (!countryExists)
+                return BadRequest($"Country '{body}' does not exist.");
 
-            throw new NotImplementedException();
+            port.CountryName = body;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+            }
+            catch (Exception)
+            {
+            return StatusCode(500, "A database error occurred.");
+            }
         }
 
         /// <summary>
@@ -194,19 +216,43 @@ namespace NAPAProject.Controllers
         [SwaggerResponse(statusCode: 400, type: typeof(string), description: "Invalid input or parameters.")]
         [SwaggerResponse(statusCode: 404, type: typeof(string), description: "Port not found.")]
         [SwaggerResponse(statusCode: 500, type: typeof(string), description: "Internal server error")]
-        public virtual IActionResult UpdatePortName([FromRoute (Name = "name")][Required][RegularExpression("^.*?$")]string name, [FromBody]string body)
+        public async Task<IActionResult> UpdatePortName([FromRoute (Name = "name")][Required][RegularExpression("^.*?$")]string name, [FromBody]string body)
         {
+            if(string.IsNullOrWhiteSpace(body))
+            {
+                return BadRequest("New name must be a non-empty string.");
+            }
 
-            //TODO: Uncomment the next line to return response 204 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(204);
-            //TODO: Uncomment the next line to return response 400 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(400, default);
-            //TODO: Uncomment the next line to return response 404 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(404, default);
-            //TODO: Uncomment the next line to return response 500 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(500, default);
+            try
+            {
+                var existingPort = await _context.Ports.FindAsync(name);
+                if (existingPort == null)
+                {
+                    return NotFound($"Port with name '{name}' not found.");
+                }
 
-            throw new NotImplementedException();
+                var nameConflict = await _context.Ships.AnyAsync(s => s.Name == body);
+                if (nameConflict)
+                {
+                    return BadRequest($"A port with name '{body}' already exists.");
+                }
+   
+                var renamedPort = new Port
+                {
+                Name = body,
+                CountryName = existingPort.CountryName
+                };
+
+                _context.Ports.Add(renamedPort);
+                _context.Ports.Remove(existingPort);
+                await _context.SaveChangesAsync();
+
+                return NoContent();
+            }
+            catch (Exception)
+            {   
+                return StatusCode(500, "A database error occurred.");
+            }
         }
     }
 }

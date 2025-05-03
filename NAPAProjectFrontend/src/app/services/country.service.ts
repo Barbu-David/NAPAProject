@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient , HttpHeaders} from '@angular/common/http';
 import { Country } from '../models/country.model';
 import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
-export class ShipService {
+export class CountryService {
   private baseUrl = 'http://localhost:8080/countries';
 
   constructor(private http: HttpClient) {}
@@ -24,6 +24,16 @@ export class ShipService {
   deleteCountry(name: string): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${encodeURIComponent(name)}`);
   }
+
+  updateNameCountry(name: string, newName: string): Observable<void> {
+    const url = `${this.baseUrl}/${encodeURIComponent(name)}`;
+    return this.http.put<void>(
+      url,
+      JSON.stringify(newName),                     
+      { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }
+    );
+  }
+
 }
 
 export {};

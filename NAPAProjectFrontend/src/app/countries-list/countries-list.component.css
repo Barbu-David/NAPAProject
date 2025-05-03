@@ -1,4 +1,4 @@
-.ships-overview {
+.countries-overview {
     display: flex;
     gap: 1rem;
     align-items: flex-start;
@@ -6,7 +6,7 @@
     font-family: Arial, sans-serif;
   }
   
-  .ships-list {
+  .countries-list {
     flex: 1;
     max-width: 600px;
   }
@@ -19,7 +19,7 @@
   }
   
   input[type="text"],
-  input[type="number"] {
+  input[type="boolean"] {
     width: 100px;
     padding: 0.25rem 0.4rem;
     font-size: 0.85rem;
@@ -60,50 +60,3 @@
     padding: 0.2rem;
     font-size: 0.8rem;
   }
-  
-.ships-chart {
-    width: 260px;
-    background: #1e1e1e;
-    padding: 0.75rem;
-    border: 1px solid #444;
-    border-radius: 4px;
-    color: white;
-    font-size: 0.85rem;
-    margin-top: 7rem; 
-  }
-
-  .bar-row {
-    display: flex;
-    align-items: center;
-    margin-bottom: 0.5rem;
-  }
-  
-  .bar-row .label {
-    width: 80px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .bar-container {
-    flex: 1;
-    background: #ccc;
-    height: 1rem;
-    margin-left: 0.5rem;
-    border-radius: 2px;
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .bar {
-    height: 100%;
-    background-color: #3b82f6;
-  }
-  
-  .bar + .value {
-    margin-left: 0.4rem;
-    width: 3ch;
-    font-size: 0.75rem;
-    text-align: right;
-  }
-  

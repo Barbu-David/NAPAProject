@@ -58,15 +58,13 @@ export class ShipsListComponent implements OnInit, OnDestroy {
     this.refreshSub = interval(1000)
       .subscribe(() => this.store.dispatch(ShipActions.loadShips()));
 
-     // sort descending, take top 5
      this.sortedShips$ = this.ships$.pipe(
       map((list: Ship[]) => [...list]
         .sort((a, b) => b.speed - a.speed)
-        .slice(0, 5)
+        .slice(0, 6)
       )
     );
 
-    // compute max from the (up to) 5
     this.maxSpeed$ = this.sortedShips$.pipe(
       map((sorted: { name: string; speed: number; }[]) => sorted.length ? sorted[0].speed : 1)
     );
@@ -105,7 +103,6 @@ export class ShipsListComponent implements OnInit, OnDestroy {
     this.speedInputs[name] = 0;
   }
 
-  /** trackBy to preserve row DOM and input states */
   trackByName(_index: number, ship: Ship): string {
     return ship.name;
   }

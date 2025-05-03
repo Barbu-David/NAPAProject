@@ -1,0 +1,46 @@
+<div class="countries-overview">
+    <div class="countries-list">
+      <h2>Countries</h2>
+  
+      <form [formGroup]="form" (ngSubmit)="add()">
+        <input class="small-input" formControlName="name" placeholder="Name" required>
+          <label>
+                <input
+                  type="checkbox"
+                  formControlName="visited"
+                />
+                Visited
+              </label>
+        <button type="submit" [disabled]="form.invalid">Add Country</button>
+      </form>
+  
+      <div class="error" *ngIf="(error$ | async) as err">{{ err }}</div>
+  
+      <table *ngIf="(countries$ | async)?.length">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Visited</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let country of countries$ | async; trackBy: trackByName">
+            <td>{{ country.name }}</td>
+            <td>{{ country.visited }}</td>
+            <td class="actions">
+              <button (click)="delete(country.name)">Delete</button>
+  
+              <input
+                class="small-input"
+                type="text"
+                placeholder="New name"
+                [(ngModel)]="renameInputs[country.name]"
+                name="rename-{{ country.name }}"
+              />
+              <button (click)="rename(country.name)">Rename</button>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>

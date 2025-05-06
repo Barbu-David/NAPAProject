@@ -16,7 +16,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCopyrightAttribute("No Copyright")]
 [assembly: System.Reflection.AssemblyDescriptionAttribute("A library generated from a OpenAPI doc")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+33ce32a80ec82df8a410d0a827eccdb49cbb3c2c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+969ca9513d8e674a455daaf82121377dc1a28d4c")]
 [assembly: System.Reflection.AssemblyProductAttribute("NAPAProject")]
 [assembly: System.Reflection.AssemblyTitleAttribute("NAPAProject")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

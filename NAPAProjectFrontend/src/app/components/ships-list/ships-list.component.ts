@@ -6,13 +6,13 @@ import { FormsModule } from '@angular/forms';
 import { map } from 'rxjs/operators';
 
 
-import * as ShipActions from '../state/ships/ships.actions';
+import * as ShipActions from '../../state/ships/ships.actions';
 import {
   selectShipList,
   selectShipLoading,
   selectShipError
-} from '../state/ships/ships.selectors';
-import { Ship } from '../models/ship.model';
+} from '../../state/ships/ships.selectors';
+import { Ship } from '../../models/ship.model';
 import { CommonModule } from '@angular/common';
 
 @Component({

@@ -1,50 +1,25 @@
-# NAPAProject - ASP.NET Core 8.0 Server
+# NAPA Project – ASP.NET Core 8.0 Server
 
 NAPA trainee assignment
 
-## Upgrade NuGet Packages
+## Full-Stack Web Application  
+**Stack:**  
+- Backend: ASP.NET Core 8.0  
+- Frontend: Angular with NgRx  
 
-NuGet packages get frequently updated.
+## Project Description  
+The project loads tables representing data about ships, countries, ports, and voyages.
 
-To upgrade this solution to the latest version of all NuGet packages, use the dotnet-outdated tool.
+- **Ships** are the most independent entities: they have a top speed and a name, and no relationships to other objects. A chart displays the top 6 fastest ships.  
+- **Countries** have a name and a boolean value indicating whether they have been visited.  
+- **Ports** have a name and belong to a country; each new port must reference an existing country. A pie chart shows the distribution of ports across countries.  
+- **Voyages** have a start time, end time, date, and departure/arrival ports. Voyages must reference valid ports and their start time must be earlier than their end time.  
 
+All entities support full CRUD operations.
 
-Install dotnet-outdated tool:
-
-```
-dotnet tool install --global dotnet-outdated-tool
-```
-
-Upgrade only to new minor versions of packages
-
-```
-dotnet outdated --upgrade --version-lock Major
-```
-
-Upgrade to all new versions of packages (more likely to include breaking API changes)
-
-```
-dotnet outdated --upgrade
-```
-
-
-## Run
-
-Linux/OS X:
-
-```
-sh build.sh
-```
-
-Windows:
-
-```
-build.bat
-```
-## Run in Docker
-
-```
-cd src/NAPAProject
-docker build -t napaproject .
-docker run -p 5000:8080 napaproject
-```
+## Development  
+1. Wrote the OpenAPI document.  
+2. *(In hindsight, choosing the `name` field as the primary key for ships, countries, and ports was a mistake.)*  
+3. Used OpenAPI Generator to scaffold the backend.  
+4. Fully implemented ships in both frontend and backend.  
+5. With ships charted, the rest of the development was smooth sailing.  

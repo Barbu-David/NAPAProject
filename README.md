@@ -1,4 +1,4 @@
-# NAPA Project – ASP.NET Core 8.0 Server
+# NAPA Project
 
 NAPA trainee assignment
 

@@ -5,14 +5,14 @@ import { Subscription, interval, Observable } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { map } from 'rxjs/operators';
 
-import * as PortActions from '../state/ports/ports.actions';
+import * as PortActions from '../../state/ports/ports.actions';
 import {
   selectPortList,
   selectPortLoading,
   selectPortError
-} from '../state/ports/ports.selectors';
+} from '../../state/ports/ports.selectors';
 
-import { Port } from '../models/port.model';
+import { Port } from '../../models/port.model';
 import { CommonModule } from '@angular/common';
 
 @Component({

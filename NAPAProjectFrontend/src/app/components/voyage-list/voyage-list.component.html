@@ -49,6 +49,25 @@
                        [(ngModel)]="endInputs[v.id!]"
                        name="updateEnd-{{v.id}}"/>
                 <button (click)="updateEnd(v.id!)">Update End</button>
+ 
+                <input
+                    placeholder="New Arrival"
+                    [(ngModel)]="arrivalPortInputs[v.id!]"
+                    name="updateArrival-{{v.id}}"
+                  />
+                 <button (click)="updateArrival(v.id!)">
+                   Update Arrival
+                 </button>
+
+           <input
+           placeholder="New Departure"
+            [(ngModel)]="departurePortInputs[v.id!]"
+            name="updateDeparture-{{v.id}}"
+            />
+<button (click)="updateDeparture(v.id!)">
+Update Departure
+          </button>
+
               </td>
             </tr>
           </tbody>

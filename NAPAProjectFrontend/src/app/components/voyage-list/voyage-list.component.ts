@@ -5,14 +5,14 @@ import { Subscription, interval, Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
-import * as VoyageActions from '../state/voyages/voyages.actions';
+import * as VoyageActions from '../../state/voyages/voyages.actions';
 import {
   selectVoyageList,
   selectVoyageLoading,
   selectVoyageError
-} from '../state/voyages/voyages.selectors';
+} from '../../state/voyages/voyages.selectors';
 
-import { Voyage } from '../models/voyage.model';
+import { Voyage } from '../../models/voyage.model';
 
 @Component({
   selector: 'app-voyages-list',
@@ -30,6 +30,8 @@ export class VoyagesListComponent implements OnInit, OnDestroy {
   dateInputs:    { [key: number]: string } = {};
   startInputs:   { [key: number]: string } = {};
   endInputs:     { [key: number]: string } = {};
+  arrivalPortInputs:   { [key: number]: string } = {};
+  departurePortInputs: { [key: number]: string } = {};
 
   private refreshSub!: Subscription;
 
@@ -39,7 +41,7 @@ export class VoyagesListComponent implements OnInit, OnDestroy {
     this.form = this.fb.group({
       departurePort: ['', Validators.required],
       arrivalPort:   ['', Validators.required],
-      date:          [''],                     // optional
+      date:          ['', Validators.required],                   
       startTime:     ['', Validators.required],
       endTime:       ['', Validators.required],
     });
@@ -86,6 +88,21 @@ export class VoyagesListComponent implements OnInit, OnDestroy {
     this.store.dispatch(VoyageActions.updateEndTime({ id: id!, endTime: val }));
     this.endInputs[id!] = '';
   }
+
+  updateArrival(id?: number) {
+    const val = id != null && this.arrivalPortInputs[id]?.trim();
+    if (!val) return;
+    this.store.dispatch(VoyageActions.updateArrivalPort({ id: id!, port: val }));
+    this.arrivalPortInputs[id!] = '';
+  }
+  
+  updateDeparture(id?: number) {
+    const val = id != null && this.departurePortInputs[id]?.trim();
+    if (!val) return;
+    this.store.dispatch(VoyageActions.updateDeparturePort({ id: id!, port: val }));
+    this.departurePortInputs[id!] = '';
+  }
+  
 
   trackById(_i: number, v: Voyage) {
     return v.id ?? _i;

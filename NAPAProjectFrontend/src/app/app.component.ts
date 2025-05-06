@@ -1,9 +1,9 @@
 import { Component }        from '@angular/core';
 import { RouterOutlet }     from '@angular/router';
-import { CountryListComponent } from './countries-list/countries-list.component';
-import { ShipsListComponent } from './ships-list/ships-list.component';
-import { PortsListComponent } from './port-list/ports-list.component';
-import { VoyagesListComponent } from './voyage-list/voyage-list.component';
+import { CountryListComponent } from './components/countries-list/countries-list.component';
+import { ShipsListComponent } from './components/ships-list/ships-list.component';
+import { PortsListComponent } from './components/port-list/ports-list.component';
+import { VoyagesListComponent } from './components/voyage-list/voyage-list.component';
 import { CommonModule }     from '@angular/common';
 
 @Component({

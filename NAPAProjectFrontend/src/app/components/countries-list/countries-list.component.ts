@@ -6,13 +6,13 @@ import { FormsModule } from '@angular/forms';
 import { map } from 'rxjs/operators';
 
 
-import * as CountryActions from '../state/countries/countries.actions';
+import * as CountryActions from '../../state/countries/countries.actions';
 import {
   selectCountriesList,
   selectCountryLoading,
   selectCountryError
-} from '../state/countries/countries.selectors';
-import { Country } from '../models/country.model';
+} from '../../state/countries/countries.selectors';
+import { Country } from '../../models/country.model';
 import { CommonModule } from '@angular/common';
 
 @Component({

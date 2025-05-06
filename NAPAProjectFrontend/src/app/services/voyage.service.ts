@@ -90,8 +90,7 @@
         { headers: this.jsonHeaders }
       );
     }
-  
-    updateStartTime(id: number, startTime: string): Observable<void> {
+      updateStartTime(id: number, startTime: string): Observable<void> {
       return this.http.put<void>(
         `${this.baseUrl}/${id}/start`,
         JSON.stringify(startTime),
